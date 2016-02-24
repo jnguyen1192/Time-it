@@ -37,7 +37,6 @@ class GameViewController: UIViewController {
        
         //Add observer Carte
         ref.childByAppendingPath("Question").observeEventType(.ChildChanged , withBlock: {snap in
-
             self.currentQuestion = self.realm.objects(Item).filter("id = \(snap.value)").first //currentQuestion contient la nouvelle question
             self.addQuestion() //Ajoute la question à la vue
             if self.nbCardInGame == 0 {
@@ -74,6 +73,24 @@ class GameViewController: UIViewController {
         //Add observer Tour
         ref.childByAppendingPath("Tour").observeEventType(.ChildChanged, withBlock: {snap in
             self.nbTour++
+            if self.nbTour > 1 {
+                if self.isMaster() && self.nbTour%2 == 0 {
+                    self.tabQuestion.append(self.currentQuestion!)
+                    self.tabQuestion.sortInPlace({ (A, B) -> Bool in
+                        return A.answer > B.answer
+                    })
+                    
+                }
+                else if !self.isMaster() && self.nbTour%2 == 1 {
+                    self.tabQuestion.append(self.currentQuestion!)
+                    self.tabQuestion.sortInPlace({ (A, B) -> Bool in
+                        return A.answer > B.answer
+                    })
+                }
+                
+            }
+
+            print("nbTour :\(self.nbTour) \(self.tabQuestion)")
             let nbQuestion = self.tabQuestion.count
             var i = 0
             for question in self.tabQuestion {
@@ -145,6 +162,7 @@ class GameViewController: UIViewController {
         
         let newQuestion = ["currentQuestion" : "\(randomQuestionNumber)"]
         ref.childByAppendingPath("Question").updateChildValues(newQuestion) //Update le serveur
+
 
     }
     
@@ -225,10 +243,10 @@ class GameViewController: UIViewController {
                     i++
                 }
                 
-                print(areaIndex!)
+
                 self.tabQuestion.insert(currentQuestion!, atIndex: areaIndex!)
-                print("tab question = \(tabQuestion)")
-                checkAnswer()
+
+                isCorrect()
                 
             } else {
                 UIView.animateWithDuration(0.5, animations: { () -> Void in
@@ -242,16 +260,21 @@ class GameViewController: UIViewController {
         
     }
     
-    func checkAnswer() {
+    func isCorrect() {
         
-        let sortedArray = tabQuestion.sort({ $0.answer < $1.answer })
-        print(sortedArray)
-        print(tabQuestion)
+        var sortedArray = tabQuestion
+        sortedArray.sortInPlace { (A, B) -> Bool in
+            return A.answer > B.answer
+        }
 
         if sortedArray == tabQuestion {
+
             updateTour()
         } else {
             print("perdu")
+            let perdu = UILabel(frame: CGRect(x: 0, y:0 , width: 100, height: 100))
+            perdu.backgroundColor = UIColor.blueColor()
+            self.view.addSubview(perdu)
         }
     }
 
