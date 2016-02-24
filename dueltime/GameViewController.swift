@@ -50,7 +50,7 @@ class GameViewController: UIViewController {
                     let dragAreaTwo = CGRect(x: label.frame.origin.x + label.frame.width + 15, y: label.frame.origin.y, width: label.frame.width, height: label.frame.height)
                     self.dragArea.append(dragAreaOne)
                     self.dragArea.append(dragAreaTwo)
-                    
+                    label.userInteractionEnabled = false
                     self.tabQuestion.append(question)
 
                     self.updateTour()
@@ -63,12 +63,9 @@ class GameViewController: UIViewController {
             }
             else {
 
-                self.nbCardInGame++
                 if let question = self.currentQuestion {
                     let label = self.view.viewWithTag(question.id) as! UILabel
                     label.text = "\(label.text!)\n\(question.answer!)"
-                    self.tabQuestion.append(question)
-                  
                 }
                 
             }
@@ -77,6 +74,23 @@ class GameViewController: UIViewController {
         //Add observer Tour
         ref.childByAppendingPath("Tour").observeEventType(.ChildChanged, withBlock: {snap in
             self.nbTour++
+            let nbQuestion = self.tabQuestion.count
+            var i = 0
+            for question in self.tabQuestion {
+                if nbQuestion == 1 {
+                    self.view.viewWithTag(question.id)?.center = self.view.center
+                }
+                else if nbQuestion == 2 {
+                    if i == 0 {
+                        self.view.viewWithTag(question.id)?.center = self.view.center
+                        self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x - (self.view.viewWithTag(question.id)?.frame.width)! - 15
+                    } else {
+                        self.view.viewWithTag(question.id)?.center = self.view.center
+                        self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x + 15
+                    }
+                }
+                i++
+            }
             
             if self.isMaster() {
                 self.pickCarte()
@@ -121,7 +135,7 @@ class GameViewController: UIViewController {
         repeat {
             unique = true
             randomQuestionNumber = arc4random_uniform(UInt32(question.count)) + 1
-            print(randomQuestionNumber)
+
             for q in tabQuestion {
                 if q.id == Int(randomQuestionNumber) {
                     unique = false
@@ -178,10 +192,13 @@ class GameViewController: UIViewController {
  
     // Drag / Drop
     func handlePan() {
+        
+
        
         if self.tap!.state == .Began {
             self.view.bringSubviewToFront(self.tap!.view!)
         }
+        
         if self.tap!.state == .Changed {
             let translation = self.tap!.translationInView(self.view)
             self.tap!.view!.center = CGPoint(x: self.tap!.view!.center.x + translation.x, y: self.tap!.view!.center.y + translation.y)
@@ -189,6 +206,9 @@ class GameViewController: UIViewController {
             
         }
         else if self.tap!.state == .Ended {
+            var areaIndex : Int?
+            var i = 0
+            
             if let area = goalReached() {
                 let areaCenterX = area.origin.x + area.width/2
                 let areaCenterY = area.origin.y + area.height/2
@@ -196,6 +216,20 @@ class GameViewController: UIViewController {
                 UIView.animateWithDuration(0.2, animations: { () -> Void in
                     self.tap!.view!.center = CGPoint(x: areaCenterX, y: areaCenterY)
                 })
+                
+                self.tap!.view!.userInteractionEnabled = false
+                for areaD in dragArea {
+                    if area == areaD {
+                        areaIndex = i
+                    }
+                    i++
+                }
+                
+                print(areaIndex!)
+                self.tabQuestion.insert(currentQuestion!, atIndex: areaIndex!)
+                print("tab question = \(tabQuestion)")
+                checkAnswer()
+                
             } else {
                 UIView.animateWithDuration(0.5, animations: { () -> Void in
                     self.tap!.view!.frame.origin = self.origin
@@ -207,7 +241,21 @@ class GameViewController: UIViewController {
         
         
     }
+    
+    func checkAnswer() {
+        
+        let sortedArray = tabQuestion.sort({ $0.answer < $1.answer })
+        print(sortedArray)
+        print(tabQuestion)
 
+        if sortedArray == tabQuestion {
+            updateTour()
+        } else {
+            print("perdu")
+        }
+    }
+
+    
     func goalReached() -> CGRect?{
  
         for area in dragArea {
