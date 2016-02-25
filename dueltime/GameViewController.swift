@@ -24,6 +24,10 @@ class GameViewController: UIViewController {
     var xFromCenter: CGFloat = 0
     var tap : UIPanGestureRecognizer?
     let origin = CGPoint(x: 0, y: 0)
+    var isIn = false
+    var lastIndex = 0
+    var lastArea = CGRect()
+
     
     var dragArea = [CGRect]()
     
@@ -57,14 +61,28 @@ class GameViewController: UIViewController {
                 }
 
             }
-            else if self.nbCardInGame == 3 {
+            else if self.nbCardInGame == 2 {
+                //Drag Area Config
+                self.dragArea.removeAll()
+                let dragAreaOne = CGRect(x: self.view.center.x - 40, y: (self.view.viewWithTag(self.tabQuestion.first!.id)?.frame.origin.y)!, width: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.width)!, height: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.height)!)
+                let dragAreaTwo = CGRect(x: (self.view.viewWithTag(self.tabQuestion.first!.id)?.frame.origin.x)! - 60, y: (self.view.viewWithTag(self.tabQuestion.first!.id)?.frame.origin.y)!, width: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.width)!, height: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.height)!)
+                let dragAreaThree = CGRect(x: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.origin.x)! + 60, y: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.origin.y)!, width: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.width)!, height: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.height)!)
+                self.dragArea.append(dragAreaOne)
+                self.dragArea.append(dragAreaTwo)
+                self.dragArea.append(dragAreaThree)
+                self.dragArea.sortInPlace({ (A, B) -> Bool in
+                    A.origin.x < B.origin.x
+                })
                 
-            }
-            else {
+                           }
+            else if self.nbCardInGame == 1 {
 
                 if let question = self.currentQuestion {
                     let label = self.view.viewWithTag(question.id) as! UILabel
                     label.text = "\(label.text!)\n\(question.answer!)"
+                    
+                    
+                    
                 }
                 
             }
@@ -74,6 +92,7 @@ class GameViewController: UIViewController {
         ref.childByAppendingPath("Tour").observeEventType(.ChildChanged, withBlock: {snap in
             self.nbTour++
             if self.nbTour > 1 {
+                self.nbCardInGame++
                 if self.isMaster() && self.nbTour%2 == 0 {
                     self.tabQuestion.append(self.currentQuestion!)
                     self.tabQuestion.sortInPlace({ (A, B) -> Bool in
@@ -218,9 +237,80 @@ class GameViewController: UIViewController {
         }
         
         if self.tap!.state == .Changed {
+            
             let translation = self.tap!.translationInView(self.view)
             self.tap!.view!.center = CGPoint(x: self.tap!.view!.center.x + translation.x, y: self.tap!.view!.center.y + translation.y)
             self.tap!.setTranslation(CGPointZero, inView: self.view)
+            if let area = goalReached() {
+                if !isIn {
+                    lastArea = area
+                    var i = 0
+
+                    for areaD in dragArea {
+                        if area == areaD {
+                            lastIndex = i
+                        }
+                        i++
+                    }
+                    print(lastIndex)
+
+                    if lastIndex == 0 {
+                        for question in tabQuestion {
+                            self.view.viewWithTag(question.id)?.frame.origin.x += 50
+                        }
+                    } else if lastIndex == 1 {
+                        self.view.viewWithTag(tabQuestion.first!.id)?.frame.origin.x -= 50
+                        for question in tabQuestion.dropFirst() {
+                            self.view.viewWithTag(question.id)?.frame.origin.x += 50
+                        }
+                    } else if lastIndex == 2{
+                        if nbCardInGame == 3 {
+                            for question in tabQuestion.dropLast() {
+                                self.view.viewWithTag(question.id)?.frame.origin.x -= 50
+                            }
+                            self.view.viewWithTag(tabQuestion.last!.id)?.frame.origin.x += 50
+                        } else {
+                            for question in tabQuestion {
+                                self.view.viewWithTag(question.id)?.frame.origin.x -= 50
+                            }
+
+                        }
+                       
+                    } else {
+                        for question in tabQuestion {
+                            self.view.viewWithTag(question.id)?.frame.origin.x -= 50
+                        }
+                    }
+                    
+                }
+                isIn = true
+            } else {
+                
+                if isIn  {
+                   
+                    if lastIndex == 0 {
+                        for question in tabQuestion {
+                            self.view.viewWithTag(question.id)?.frame.origin.x -= 50
+                        }
+                    } else if lastIndex == 1 {
+                        self.view.viewWithTag(tabQuestion.first!.id)?.frame.origin.x += 50
+                        for question in tabQuestion.dropFirst() {
+                            self.view.viewWithTag(question.id)?.frame.origin.x -= 50
+                        }
+                    } else if lastIndex == 2{
+                        for question in tabQuestion.dropLast() {
+                            self.view.viewWithTag(question.id)?.frame.origin.x += 50
+                        }
+                        self.view.viewWithTag(tabQuestion.last!.id)?.frame.origin.x -= 50
+                    } else {
+                        for question in tabQuestion {
+                            self.view.viewWithTag(question.id)?.frame.origin.x += 50
+                        }
+                    }
+
+                    isIn = false
+                }
+            }
             
         }
         else if self.tap!.state == .Ended {
@@ -286,7 +376,7 @@ class GameViewController: UIViewController {
             let areaCenterY = area.origin.y + area.height/2
 
             let distanceFromGoal: CGFloat = sqrt(pow(self.tap!.view!.center.x - areaCenterX, 2) + pow(self.tap!.view!.center.y - areaCenterY, 2))
-            if distanceFromGoal < self.tap!.view!.bounds.size.width / 1.5 {
+            if distanceFromGoal < self.tap!.view!.bounds.size.width / 3 {
                 
                 return area
             }
