@@ -44,6 +44,8 @@ class GameViewController: UIViewController {
             self.currentQuestion = self.realm.objects(Item).filter("id = \(snap.value)").first //currentQuestion contient la nouvelle question
             self.addQuestion() //Ajoute la question à la vue
             if self.nbCardInGame == 0 {
+
+
                 self.nbCardInGame++
                 if let question = self.currentQuestion {
                     let label = self.view.viewWithTag(question.id) as! UILabel
@@ -90,6 +92,7 @@ class GameViewController: UIViewController {
         
         //Add observer Tour
         ref.childByAppendingPath("Tour").observeEventType(.ChildChanged, withBlock: {snap in
+
             self.nbTour++
             if self.nbTour > 1 {
                 self.nbCardInGame++
@@ -109,7 +112,7 @@ class GameViewController: UIViewController {
                 
             }
 
-            print("nbTour :\(self.nbTour) \(self.tabQuestion)")
+
             let nbQuestion = self.tabQuestion.count
             var i = 0
             for question in self.tabQuestion {
@@ -243,6 +246,8 @@ class GameViewController: UIViewController {
             self.tap!.setTranslation(CGPointZero, inView: self.view)
             if let area = goalReached() {
                 if !isIn {
+                    isIn = true
+
                     lastArea = area
                     var i = 0
 
@@ -252,7 +257,7 @@ class GameViewController: UIViewController {
                         }
                         i++
                     }
-                    print(lastIndex)
+
 
                     if lastIndex == 0 {
                         for question in tabQuestion {
@@ -283,32 +288,12 @@ class GameViewController: UIViewController {
                     }
                     
                 }
-                isIn = true
             } else {
                 
                 if isIn  {
-                   
-                    if lastIndex == 0 {
-                        for question in tabQuestion {
-                            self.view.viewWithTag(question.id)?.frame.origin.x -= 50
-                        }
-                    } else if lastIndex == 1 {
-                        self.view.viewWithTag(tabQuestion.first!.id)?.frame.origin.x += 50
-                        for question in tabQuestion.dropFirst() {
-                            self.view.viewWithTag(question.id)?.frame.origin.x -= 50
-                        }
-                    } else if lastIndex == 2{
-                        for question in tabQuestion.dropLast() {
-                            self.view.viewWithTag(question.id)?.frame.origin.x += 50
-                        }
-                        self.view.viewWithTag(tabQuestion.last!.id)?.frame.origin.x -= 50
-                    } else {
-                        for question in tabQuestion {
-                            self.view.viewWithTag(question.id)?.frame.origin.x += 50
-                        }
-                    }
-
                     isIn = false
+
+                    goToInitPosition()
                 }
             }
             
@@ -350,6 +335,26 @@ class GameViewController: UIViewController {
         
     }
     
+    func goToInitPosition() {
+        if nbCardInGame == 1 {
+            self.view.viewWithTag((tabQuestion.first?.id)!)?.center = self.view.center
+        } else if nbCardInGame == 2 {
+            let view1  = self.view.viewWithTag((tabQuestion.first?.id)!)
+            let view2 = self.view.viewWithTag((tabQuestion.last?.id)!)
+
+            self.view.viewWithTag((tabQuestion.first?.id)!)?.center = self.view.center
+            self.view.viewWithTag((tabQuestion.last?.id)!)?.center = self.view.center
+
+            self.view.viewWithTag((tabQuestion.first?.id)!)?.center.x = self.view.center.x - 15 - (view1?.frame.width)!/2
+            self.view.viewWithTag((tabQuestion.last?.id)!)?.center.x = self.view.center.x + 15 + (view1?.frame.width)!/2
+
+        } else {
+            
+        }
+        
+     
+    }
+    
     func isCorrect() {
         
         var sortedArray = tabQuestion
@@ -358,10 +363,8 @@ class GameViewController: UIViewController {
         }
 
         if sortedArray == tabQuestion {
-
             updateTour()
         } else {
-            print("perdu")
             let perdu = UILabel(frame: CGRect(x: 0, y:0 , width: 100, height: 100))
             perdu.backgroundColor = UIColor.blueColor()
             self.view.addSubview(perdu)
@@ -376,7 +379,7 @@ class GameViewController: UIViewController {
             let areaCenterY = area.origin.y + area.height/2
 
             let distanceFromGoal: CGFloat = sqrt(pow(self.tap!.view!.center.x - areaCenterX, 2) + pow(self.tap!.view!.center.y - areaCenterY, 2))
-            if distanceFromGoal < self.tap!.view!.bounds.size.width / 3 {
+            if distanceFromGoal < self.tap!.view!.bounds.size.width / 2 {
                 
                 return area
             }
