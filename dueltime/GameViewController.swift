@@ -33,6 +33,7 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+      
         tap = UIPanGestureRecognizer(target: self, action: Selector("handlePan"))
 
         let newQuestion = ["currentQuestion" : "0"]
@@ -41,6 +42,7 @@ class GameViewController: UIViewController {
        
         //Add observer Carte
         ref.childByAppendingPath("Question").observeEventType(.ChildChanged , withBlock: {snap in
+
             self.currentQuestion = self.realm.objects(Item).filter("id = \(snap.value)").first //currentQuestion contient la nouvelle question
             self.addQuestion() //Ajoute la question à la vue
             if self.nbCardInGame == 0 {
@@ -57,8 +59,10 @@ class GameViewController: UIViewController {
                     self.dragArea.append(dragAreaTwo)
                     label.userInteractionEnabled = false
                     self.tabQuestion.append(question)
-
-                    self.updateTour()
+                    
+                    if self.isMaster() {
+                        self.updateTour()
+                    }
                     
                 }
 
@@ -76,12 +80,13 @@ class GameViewController: UIViewController {
                     A.origin.x < B.origin.x
                 })
                 
-                           }
+            }
             else if self.nbCardInGame == 1 {
+
 
                 if let question = self.currentQuestion {
                     let label = self.view.viewWithTag(question.id) as! UILabel
-                    label.text = "\(label.text!)\n\(question.answer!)"
+                    label.text = "\(label.text!)"
                     
                     
                     
@@ -132,6 +137,8 @@ class GameViewController: UIViewController {
             }
             
             if self.isMaster() {
+
+
                 self.pickCarte()
             }
         })
@@ -142,6 +149,8 @@ class GameViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         if isMaster() {
+
+
             pickCarte()
         }
     }
@@ -152,6 +161,7 @@ class GameViewController: UIViewController {
     }
     
     func updateTour() {
+
         ref.childByAppendingPath("Tour").observeSingleEventOfType(.Value, withBlock: {snap in
 
             let newTurn = snap.value.objectForKey("nbTour") as! Int + 1
@@ -191,6 +201,7 @@ class GameViewController: UIViewController {
 
     
     func addQuestion() {
+
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 75, height: 75))
         label.numberOfLines = 2
         
@@ -359,7 +370,7 @@ class GameViewController: UIViewController {
         
         var sortedArray = tabQuestion
         sortedArray.sortInPlace { (A, B) -> Bool in
-            return A.answer > B.answer
+            return Int(A.answer!)! < Int(B.answer!)!
         }
 
         if sortedArray == tabQuestion {
