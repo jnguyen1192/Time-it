@@ -36,65 +36,7 @@ class GameViewController: UIViewController {
       
         tap = UIPanGestureRecognizer(target: self, action: Selector("handlePan"))
 
-        let newQuestion = ["currentQuestion" : "0"]
-
-        ref.childByAppendingPath("Question").updateChildValues(newQuestion) //Init la question
-       
-        //Add observer Carte
-        ref.childByAppendingPath("Question").observeEventType(.ChildChanged , withBlock: {snap in
-
-            self.currentQuestion = self.realm.objects(Item).filter("id = \(snap.value)").first //currentQuestion contient la nouvelle question
-            self.addQuestion() //Ajoute la question à la vue
-            if self.nbCardInGame == 0 {
-
-
-                self.nbCardInGame++
-                if let question = self.currentQuestion {
-                    let label = self.view.viewWithTag(question.id) as! UILabel
-                    label.text = "\(label.text!)\n\(question.answer!)"
-                    label.center = self.view.center
-                    let dragAreaOne = CGRect(x: label.frame.origin.x - label.frame.width - 15, y: label.frame.origin.y, width: label.frame.width, height: label.frame.height)
-                    let dragAreaTwo = CGRect(x: label.frame.origin.x + label.frame.width + 15, y: label.frame.origin.y, width: label.frame.width, height: label.frame.height)
-                    self.dragArea.append(dragAreaOne)
-                    self.dragArea.append(dragAreaTwo)
-                    label.userInteractionEnabled = false
-                    self.tabQuestion.append(question)
-                    
-                    if self.isMaster() {
-                        self.updateTour()
-                    }
-                    
-                }
-
-            }
-            else if self.nbCardInGame == 2 {
-                //Drag Area Config
-                self.dragArea.removeAll()
-                let dragAreaOne = CGRect(x: self.view.center.x - 40, y: (self.view.viewWithTag(self.tabQuestion.first!.id)?.frame.origin.y)!, width: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.width)!, height: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.height)!)
-                let dragAreaTwo = CGRect(x: (self.view.viewWithTag(self.tabQuestion.first!.id)?.frame.origin.x)! - 60, y: (self.view.viewWithTag(self.tabQuestion.first!.id)?.frame.origin.y)!, width: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.width)!, height: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.height)!)
-                let dragAreaThree = CGRect(x: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.origin.x)! + 60, y: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.origin.y)!, width: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.width)!, height: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.height)!)
-                self.dragArea.append(dragAreaOne)
-                self.dragArea.append(dragAreaTwo)
-                self.dragArea.append(dragAreaThree)
-                self.dragArea.sortInPlace({ (A, B) -> Bool in
-                    A.origin.x < B.origin.x
-                })
                 
-            }
-            else if self.nbCardInGame == 1 {
-
-
-                if let question = self.currentQuestion {
-                    let label = self.view.viewWithTag(question.id) as! UILabel
-                    label.text = "\(label.text!)"
-                    
-                    
-                    
-                }
-                
-            }
-        })
-        
         //Add observer Tour
         ref.childByAppendingPath("Tour").observeEventType(.ChildChanged, withBlock: {snap in
 
@@ -148,11 +90,76 @@ class GameViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
+        //For each child & new child
+        ref.childByAppendingPath("Question").observeEventType(.ChildAdded, withBlock: {snap in
+            let question = self.realm.objects(Item).filter("id = \(snap.value)").first
+            self.tabQuestion.append(question!)
+            self.tabQuestion.sortInPlace({ (A, B) -> Bool in
+                Int(A.answer!) < Int(A.answer!)
+                
+            })
+            self.currentQuestion = self.realm.objects(Item).filter("id = \(snap.value)").first
+            self.addQuestion()
+            
+            //Tiles positioning
+            if self.nbCardInGame == 0 {
+                
+                self.nbCardInGame++
+                if let question = self.currentQuestion {
+                    let label = self.view.viewWithTag(question.id) as! UILabel
+                    label.text = "\(label.text!)\n\(question.answer!)"
+                    label.center = self.view.center
+                    let dragAreaOne = CGRect(x: label.frame.origin.x - label.frame.width - 15, y: label.frame.origin.y, width: label.frame.width, height: label.frame.height)
+                    let dragAreaTwo = CGRect(x: label.frame.origin.x + label.frame.width + 15, y: label.frame.origin.y, width: label.frame.width, height: label.frame.height)
+                    self.dragArea.append(dragAreaOne)
+                    self.dragArea.append(dragAreaTwo)
+                    label.userInteractionEnabled = false
+                    self.tabQuestion.append(question)
+                    
+                    
+                    self.updateTour()
+                    
+                    
+                }
+                
+            }
+            else if self.nbCardInGame == 2 {
+                //Drag Area Config
+                self.dragArea.removeAll()
+                let dragAreaOne = CGRect(x: self.view.center.x - 40, y: (self.view.viewWithTag(self.tabQuestion.first!.id)?.frame.origin.y)!, width: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.width)!, height: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.height)!)
+                let dragAreaTwo = CGRect(x: (self.view.viewWithTag(self.tabQuestion.first!.id)?.frame.origin.x)! - 60, y: (self.view.viewWithTag(self.tabQuestion.first!.id)?.frame.origin.y)!, width: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.width)!, height: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.height)!)
+                let dragAreaThree = CGRect(x: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.origin.x)! + 60, y: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.origin.y)!, width: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.width)!, height: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.height)!)
+                self.dragArea.append(dragAreaOne)
+                self.dragArea.append(dragAreaTwo)
+                self.dragArea.append(dragAreaThree)
+                self.dragArea.sortInPlace({ (A, B) -> Bool in
+                    A.origin.x < B.origin.x
+                })
+                
+            }
+            else if self.nbCardInGame == 1 {
+                
+                
+                if let question = self.currentQuestion {
+                    let label = self.view.viewWithTag(question.id) as! UILabel
+                    label.text = "\(label.text!)"
+                    
+                    
+                    
+                }
+                
+            }
+
+            
+
+        })
+        
+        
         if isMaster() {
-
-
-            pickCarte()
+            self.pickCarte()
         }
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -192,7 +199,7 @@ class GameViewController: UIViewController {
             }
         } while !unique
         
-        let newQuestion = ["currentQuestion" : "\(randomQuestionNumber)"]
+        let newQuestion = ["\(randomQuestionNumber)" : "\(randomQuestionNumber)"]
         ref.childByAppendingPath("Question").updateChildValues(newQuestion) //Update le serveur
 
 
