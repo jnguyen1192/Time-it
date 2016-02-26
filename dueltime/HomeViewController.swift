@@ -103,6 +103,11 @@ class HomeViewController: UIViewController {
         item3.question = "Papier"
         item3.answer = "934"
 
+        let item4 = Item()
+        item4.id = 4
+        item4.question = "Lait"
+        item4.answer = "9999"
+        
         let realm = try! Realm()
         try! realm.write {
             realm.deleteAll()
@@ -110,6 +115,7 @@ class HomeViewController: UIViewController {
             realm.add(item1)
             realm.add(item2)
             realm.add(item3)
+            realm.add(item4)
             print("Fin ajout")
         }
 
