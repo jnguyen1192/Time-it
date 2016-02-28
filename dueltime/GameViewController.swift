@@ -61,33 +61,40 @@ class GameViewController: UIViewController {
         })
         
         ref.childByAppendingPath("Question").observeEventType(.ChildAdded, withBlock: {snap in
-print(snap.value)
+
             let question = self.realm.objects(Item).filter("id = \(snap.value)").first
             self.tabQuestion.append(question!)
+            
+           
+            
 
-            self.currentQuestion = self.tabQuestion.last
+
            
             self.addQuestion()
+            if self.nbTour == 1  {
+                self.tabQuestion.sortInPlace({ (A, B) -> Bool in
+                    return Int(A.id) < Int(B.id)
+                })
+                print(self.tabQuestion[0].id)
+                let label = self.view.viewWithTag(self.tabQuestion[0].id) as! UILabel
+                label.text = "\(self.tabQuestion.first!.question!)\n\(self.tabQuestion.first!.answer!)"
+                
+            }
+            
+            self.currentQuestion = self.tabQuestion.last
+
             self.placeQuestion()
-            //self.placeDropArea()
+            self.placeDropArea()
             
             if self.nbTour == 0 {
                 self.nbTour++
                 
-                self.ref.childByAppendingPath("Question").observeSingleEventOfType(.Value, withBlock: {snap in
-                    if self.tabQuestion[0].id != snap.value[0]{
-                        print("reverse")  
-                        self.tabQuestion = self.tabQuestion.reverse()
-                    }
-                    if self.isMaster() {
-                        self.pickCarte()
-                        
-                    }
-
-                })
-                
+                if self.isMaster() {
+                    self.pickCarte()
+                    
+                }
             }
-        })
+                  })
        
 
         //Init game
@@ -139,7 +146,7 @@ print(snap.value)
     
     func placeDropArea() {
 
-        if nbQuestion == 1 {
+        if nbTour == 1 {
             if let question = tabQuestion.first {
                 let label = self.view.viewWithTag(question.id) as! UILabel
                 label.text = "\(label.text!)\n\(question.answer!)"
@@ -152,7 +159,7 @@ print(snap.value)
             }
             
         }
-        else if nbQuestion == 3 {
+        else if nbTour == 3 {
             //Drag Area Config
             self.dragArea.removeAll()
             let dragAreaOne = CGRect(x: self.view.center.x - 40, y: (self.view.viewWithTag(self.tabQuestion.first!.id)?.frame.origin.y)!, width: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.width)!, height: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.height)!)
@@ -166,7 +173,7 @@ print(snap.value)
             })
             
         }
-        else if nbQuestion == 2 {
+        else if nbTour == 2 {
             
             
             if let question = self.currentQuestion {
@@ -234,16 +241,8 @@ print(snap.value)
         label.backgroundColor = UIColor.redColor()
         label.frame.origin.y = self.view.frame.height - 75
         label.frame.origin.x = 0
-
-        
         self.view.addSubview(label)
-        
-        if nbQuestion == 1{
-            
-            label.text = "\(tabQuestion.first!.question!)\n\(tabQuestion.first!.answer!)"
-        }
-            
-        else {
+        if self.nbTour > 0 {
             label.userInteractionEnabled = true
             if isMaster() && nbTour%2 == 0 {
                 label.addGestureRecognizer(tap!)
