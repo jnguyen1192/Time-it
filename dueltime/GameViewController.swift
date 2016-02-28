@@ -41,12 +41,6 @@ class GameViewController: UIViewController {
         ///Met à jour compteur nbTour pour chaque client
         ///nbTour détermine qui fait pickCarte
 
-        ref.childByAppendingPath("Tour").observeEventType(.ChildChanged, withBlock: {snap in
-            self.nbTour++
-            if self.isMaster() {
-                self.pickCarte()
-            }
-        })
         
 
     }
@@ -54,52 +48,68 @@ class GameViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        /**
-        Pour chaque client :
-        Ajoute question au tableau des questions
+        //self.ref.childByAppendingPath("Tour").updateChildValues(["nbTour" : 0])
 
-        Place les questions dans la vue
-        Place les dropZone
-        **/
-        ref.childByAppendingPath("Question").observeEventType(.ChildAdded, withBlock: {snap in
-            self.currentQuestion = self.realm.objects(Item).filter("id = \(snap.value)").first
-            if let question = self.currentQuestion {
-                self.tabQuestion.append(question)
-                self.tabQuestion.sortInPlace({ (A, B) -> Bool in
-                    Int(A.answer!) < Int(B.answer!)
-                    
-                })
-                self.addQuestion()
-                self.placeQuestion()
-                self.placeDropArea()
-                if self.nbQuestion == 1 {
-                    if self.isMaster() {
-                        self.updateTour()
-                        
-                    }
-                }
-               
+        
+        ref.childByAppendingPath("Tour").observeEventType(.ChildChanged, withBlock: {snap in
+
+
+            self.nbTour++
+            if self.isMaster() {
+                self.pickCarte()
             }
-            
         })
         
+        ref.childByAppendingPath("Question").observeEventType(.ChildAdded, withBlock: {snap in
+print(snap.value)
+            let question = self.realm.objects(Item).filter("id = \(snap.value)").first
+            self.tabQuestion.append(question!)
+
+            self.currentQuestion = self.tabQuestion.last
+           
+            self.addQuestion()
+            self.placeQuestion()
+            //self.placeDropArea()
+            
+            if self.nbTour == 0 {
+                self.nbTour++
+                
+                self.ref.childByAppendingPath("Question").observeSingleEventOfType(.Value, withBlock: {snap in
+                    if self.tabQuestion[0].id != snap.value[0]{
+                        print("reverse")  
+                        self.tabQuestion = self.tabQuestion.reverse()
+                    }
+                    if self.isMaster() {
+                        self.pickCarte()
+                        
+                    }
+
+                })
+                
+            }
+        })
+       
+
         //Init game
         if isMaster() {
             self.pickCarte()
         }
 
+       
     }
     
     
    
     func placeQuestion() {
-        print(nbQuestion)
+
         var i = 0
-        for question in self.tabQuestion {
-            if nbQuestion == 1 {
+
+        for question in self.tabQuestion.dropLast() {
+            if nbTour == 1 {
+
                 self.view.viewWithTag(question.id)?.center = self.view.center
             }
-            else if nbQuestion == 2 {
+            else if nbTour == 2 {
                 if i == 0 {
                     self.view.viewWithTag(question.id)?.center = self.view.center
                     self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x - (self.view.viewWithTag(question.id)?.frame.width)! - 15
@@ -107,16 +117,30 @@ class GameViewController: UIViewController {
                     self.view.viewWithTag(question.id)?.center = self.view.center
                     self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x + 15
                 }
+            } else if nbTour == 3 {
+                if i == 0 {
+                    self.view.viewWithTag(question.id)?.center = self.view.center
+                    self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x - (self.view.viewWithTag(question.id)?.frame.width)! - 15
+
+                } else if i == 1  {
+                    self.view.viewWithTag(question.id)?.center = self.view.center
+
+                } else {
+                    self.view.viewWithTag(question.id)?.center = self.view.center
+                    self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x + (self.view.viewWithTag(question.id)?.frame.width)! + 15
+
+                }
             }
             i++
         }
 
+        
     }
     
     func placeDropArea() {
 
         if nbQuestion == 1 {
-            if let question = self.currentQuestion {
+            if let question = tabQuestion.first {
                 let label = self.view.viewWithTag(question.id) as! UILabel
                 label.text = "\(label.text!)\n\(question.answer!)"
                 label.center = self.view.center
@@ -162,24 +186,14 @@ class GameViewController: UIViewController {
 
     }
     
-    /**
-        Doit être apellé par un seul client
-     **/
+
     func updateTour() {
+        nbTour++
 
-        ref.childByAppendingPath("Tour").observeSingleEventOfType(.Value, withBlock: {snap in
-
-            let newTurn = snap.value.objectForKey("nbTour") as! Int + 1
-            self.ref.childByAppendingPath("Tour").updateChildValues(["nbTour" : newTurn])
-
-        })
+        self.ref.childByAppendingPath("Tour").updateChildValues(["nbTour" : nbTour])
     }
-    /**
-     Doit être apellé par un seul client
-     **/
-     
     
-    //Return an Int
+    
     func pickCarte() {
 
         let question = realm.objects(Item) //Contient toutes les questions
@@ -209,8 +223,8 @@ class GameViewController: UIViewController {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 75, height: 75))
         label.numberOfLines = 2
         
-        if let question = currentQuestion?.question {
-            if let id = currentQuestion?.id {
+        if let question = tabQuestion.last?.question {
+            if let id = tabQuestion.last?.id {
                 label.text = "\(question)"
                 label.tag = id
             }
@@ -224,8 +238,22 @@ class GameViewController: UIViewController {
         
         self.view.addSubview(label)
         
-        label.userInteractionEnabled = true
-        label.addGestureRecognizer(tap!)
+        if nbQuestion == 1{
+            
+            label.text = "\(tabQuestion.first!.question!)\n\(tabQuestion.first!.answer!)"
+        }
+            
+        else {
+            label.userInteractionEnabled = true
+            if isMaster() && nbTour%2 == 0 {
+                label.addGestureRecognizer(tap!)
+                
+            } else if !isMaster() && nbTour%2 == 1 {
+                label.addGestureRecognizer(tap!)
+                
+            }
+
+        }
         
     }
     
