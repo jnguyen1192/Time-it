@@ -156,18 +156,21 @@ class GameViewController: UIViewController {
 
         if self.nbTour == 1 {
             if let question = tabQuestion.first {
-                let label = self.view.viewWithTag(question.id) as! UILabel
-                label.text = "\(label.text!)\n\(question.answer!)"
-                label.center = self.view.center
-                let dragAreaOne = CGRect(x: label.frame.origin.x - label.frame.width - 15, y: label.frame.origin.y, width: label.frame.width, height: label.frame.height)
-                let dragAreaTwo = CGRect(x: label.frame.origin.x + label.frame.width + 15, y: label.frame.origin.y, width: label.frame.width, height: label.frame.height)
+                let label = self.view.viewWithTag(question.id)
+                let dragAreaOne = CGRect(x: label!.frame.origin.x - label!.frame.width - 15, y: label!.frame.origin.y, width: label!.frame.width, height: label!.frame.height)
+                let dragAreaTwo = CGRect(x: label!.frame.origin.x + label!.frame.width + 15, y: label!.frame.origin.y, width: label!.frame.width, height: label!.frame.height)
                 self.dragArea.append(dragAreaOne)
                 self.dragArea.append(dragAreaTwo)
-                label.userInteractionEnabled = false
+                
+                for area in dragArea {
+                    let view = UIView(frame: area)
+                    view.backgroundColor = UIColor.greenColor()
+                    self.view.addSubview(view)
+                }
             }
             
         }
-        else if nbTour == 3 {
+        else if nbTour == 2 {
             //Drag Area Config
             self.dragArea.removeAll()
             let dragAreaOne = CGRect(x: self.view.center.x - 40, y: (self.view.viewWithTag(self.tabQuestion.first!.id)?.frame.origin.y)!, width: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.width)!, height: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.height)!)
@@ -251,6 +254,7 @@ class GameViewController: UIViewController {
         label.frame.origin.x = 0
         self.view.addSubview(label)
         if self.nbTour > 0 {
+            print("user")
             label.userInteractionEnabled = true
             if isMaster() && nbTour%2 == 0 {
                 label.addGestureRecognizer(tap!)
@@ -301,12 +305,13 @@ class GameViewController: UIViewController {
 
 
                     if lastIndex == 0 {
-                        for question in tabQuestion {
+
+                        for question in tabQuestion.dropLast() {
                             self.view.viewWithTag(question.id)?.frame.origin.x += 50
                         }
                     } else if lastIndex == 1 {
                         self.view.viewWithTag(tabQuestion.first!.id)?.frame.origin.x -= 50
-                        for question in tabQuestion.dropFirst() {
+                        for question in tabQuestion.dropLast().dropFirst() {
                             self.view.viewWithTag(question.id)?.frame.origin.x += 50
                         }
                     } else if lastIndex == 2{
@@ -379,9 +384,9 @@ class GameViewController: UIViewController {
     }
     
     func goToInitPosition() {
-        if nbQuestion == 1 {
+        if nbTour == 1 {
             self.view.viewWithTag((tabQuestion.first?.id)!)?.center = self.view.center
-        } else if nbQuestion == 2 {
+        } else if nbTour == 2 {
             let view1  = self.view.viewWithTag((tabQuestion.first?.id)!)
             let view2 = self.view.viewWithTag((tabQuestion.last?.id)!)
 
