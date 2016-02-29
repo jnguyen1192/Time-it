@@ -64,11 +64,6 @@ class GameViewController: UIViewController {
 
             let question = self.realm.objects(Item).filter("id = \(snap.value)").first
             self.tabQuestion.append(question!)
-            
-           
-            
-
-
            
             self.addQuestion()
             if self.nbTour == 1  {
