@@ -66,7 +66,7 @@ class GameViewController: UIViewController {
             self.tabQuestion.append(question!)
             
            
-            
+            })
 
 
            
@@ -111,42 +111,50 @@ class GameViewController: UIViewController {
 
         var i = 0
 
-        for question in self.tabQuestion.dropLast() {
             if nbTour == 1 {
-
-                self.view.viewWithTag(question.id)?.center = self.view.center
+                for question in self.tabQuestion.dropLast() {
+                    self.view.viewWithTag(question.id)?.center = self.view.center
+                }
             }
             else if nbTour == 2 {
-                if i == 0 {
-                    self.view.viewWithTag(question.id)?.center = self.view.center
-                    self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x - (self.view.viewWithTag(question.id)?.frame.width)! - 15
-                } else {
-                    self.view.viewWithTag(question.id)?.center = self.view.center
-                    self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x + 15
+                for question in self.tabQuestion.dropLast() {
+                    if i == 0 {
+                        self.view.viewWithTag(question.id)?.center = self.view.center
+                        self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x - (self.view.viewWithTag(question.id)?.frame.width)! - 15
+                    } else {
+                        self.view.viewWithTag(question.id)?.center = self.view.center
+                        self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x + 15
+                    }
+
+                    i++
                 }
-            } else if nbTour == 3 {
-                if i == 0 {
-                    self.view.viewWithTag(question.id)?.center = self.view.center
-                    self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x - (self.view.viewWithTag(question.id)?.frame.width)! - 15
+            } else if nbTour >= 3 {
+                for question in self.tabQuestion.dropLast() {
+                    if i == 0 {
+                        self.view.viewWithTag(question.id)?.center = self.view.center
+                        self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x - (self.view.viewWithTag(question.id)?.frame.width)! - 15
+                        
+                    } else if i == 1  {
+                        self.view.viewWithTag(question.id)?.center = self.view.center
+                        
+                    } else {
+                        self.view.viewWithTag(question.id)?.center = self.view.center
+                        self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x + (self.view.viewWithTag(question.id)?.frame.width)! + 15
+                        
+                    }
 
-                } else if i == 1  {
-                    self.view.viewWithTag(question.id)?.center = self.view.center
-
-                } else {
-                    self.view.viewWithTag(question.id)?.center = self.view.center
-                    self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x + (self.view.viewWithTag(question.id)?.frame.width)! + 15
-
+                    i++
                 }
+
             }
-            i++
         }
-
+    
         
     }
     
     func placeDropArea() {
 
-        if nbTour == 1 {
+        if self.nbTour == 1 {
             if let question = tabQuestion.first {
                 let label = self.view.viewWithTag(question.id) as! UILabel
                 label.text = "\(label.text!)\n\(question.answer!)"
