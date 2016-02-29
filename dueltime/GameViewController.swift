@@ -64,11 +64,6 @@ class GameViewController: UIViewController {
 
             let question = self.realm.objects(Item).filter("id = \(snap.value)").first
             self.tabQuestion.append(question!)
-            
-           
-            })
-
-
            
             self.addQuestion()
             if self.nbTour == 1  {
@@ -111,45 +106,46 @@ class GameViewController: UIViewController {
 
         var i = 0
 
-            if nbTour == 1 {
-                for question in self.tabQuestion.dropLast() {
-                    self.view.viewWithTag(question.id)?.center = self.view.center
-                }
-            }
-            else if nbTour == 2 {
-                for question in self.tabQuestion.dropLast() {
-                    if i == 0 {
-                        self.view.viewWithTag(question.id)?.center = self.view.center
-                        self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x - (self.view.viewWithTag(question.id)?.frame.width)! - 15
-                    } else {
-                        self.view.viewWithTag(question.id)?.center = self.view.center
-                        self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x + 15
-                    }
-
-                    i++
-                }
-            } else if nbTour >= 3 {
-                for question in self.tabQuestion.dropLast() {
-                    if i == 0 {
-                        self.view.viewWithTag(question.id)?.center = self.view.center
-                        self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x - (self.view.viewWithTag(question.id)?.frame.width)! - 15
-                        
-                    } else if i == 1  {
-                        self.view.viewWithTag(question.id)?.center = self.view.center
-                        
-                    } else {
-                        self.view.viewWithTag(question.id)?.center = self.view.center
-                        self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x + (self.view.viewWithTag(question.id)?.frame.width)! + 15
-                        
-                    }
-
-                    i++
-                }
+        
+        if nbTour == 1 {
+            for question in self.tabQuestion.dropLast() {
+                self.view.viewWithTag(question.id)?.center = self.view.center
+                i++
 
             }
         }
-    
-        
+        else if nbTour == 2 {
+            for question in self.tabQuestion.dropLast() {
+
+                if i == 0 {
+                    self.view.viewWithTag(question.id)?.center = self.view.center
+                    self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x - (self.view.viewWithTag(question.id)?.frame.width)! - 15
+                } else {
+                    self.view.viewWithTag(question.id)?.center = self.view.center
+                    self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x + 15
+                }
+                i++
+
+            }
+
+        } else if nbTour >= 3 {
+            for question in self.tabQuestion.dropLast() {
+                if i == 0 {
+                    self.view.viewWithTag(question.id)?.center = self.view.center
+                    self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x - (self.view.viewWithTag(question.id)?.frame.width)! - 15
+                        
+                } else if i == 1  {
+                    self.view.viewWithTag(question.id)?.center = self.view.center
+                        
+                } else {
+                    self.view.viewWithTag(question.id)?.center = self.view.center
+                    self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x + (self.view.viewWithTag(question.id)?.frame.width)! + 15
+                        
+                }
+                i++
+
+            }
+        }
     }
     
     func placeDropArea() {
@@ -254,7 +250,6 @@ class GameViewController: UIViewController {
         label.frame.origin.x = 0
         self.view.addSubview(label)
         if self.nbTour > 0 {
-            print("user")
             label.userInteractionEnabled = true
             if isMaster() && nbTour%2 == 0 {
                 label.addGestureRecognizer(tap!)
