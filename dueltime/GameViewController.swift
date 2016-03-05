@@ -182,11 +182,13 @@ class GameViewController: UIViewController {
     func placeDropArea() {
         ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":-1])
 
-        if self.nbTour == 1 {
-            if let question = tabQuestion.first {
-                let label = self.view.viewWithTag(question.id)
-                let dragAreaOne = CGRect(x: label!.frame.origin.x - label!.frame.width - 15, y: label!.frame.origin.y, width: label!.frame.width, height: label!.frame.height)
-                let dragAreaTwo = CGRect(x: label!.frame.origin.x + label!.frame.width + 15, y: label!.frame.origin.y, width: label!.frame.width, height: label!.frame.height)
+        if nbTour == 1 {
+            if let _ = tabQuestion.first {
+                let label = UIView(frame: CGRect(x: 0, y: 0, width: 75, height: 75))
+                label.center = self.view.center
+
+                let dragAreaOne = CGRect(x: label.frame.origin.x  - 75, y: label.frame.origin.y, width: 75, height: 75)
+                let dragAreaTwo = CGRect(x: label.frame.origin.x + 75, y: label.frame.origin.y, width: 75, height: 75)
                 self.dragArea.append(dragAreaOne)
                 self.dragArea.append(dragAreaTwo)
               
@@ -284,6 +286,7 @@ class GameViewController: UIViewController {
         label.frame.origin.x = 0
         self.view.addSubview(label)
         if self.nbTour > 0 {
+
             label.userInteractionEnabled = true
             if isMaster() && nbTour%2 == 0 {
                 label.addGestureRecognizer(tap!)
