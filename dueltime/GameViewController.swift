@@ -99,12 +99,7 @@ class GameViewController: UIViewController {
             self.tabQuestion.append(question!)
             self.addQuestion()
             if self.nbTour == 1  {
-                /*
-                self.tabQuestion.sortInPlace({ (A, B) -> Bool in
-                    return Int(A.id) < Int(B.id)
-                })
-*/
-                let label = self.view.viewWithTag(self.tabQuestion[0].id) as! UILabel
+            let label = self.view.viewWithTag(self.tabQuestion[0].id) as! UILabel
                 label.text = "\(self.tabQuestion.first!.question!)\n\(self.tabQuestion.first!.answer!)"
             }
             
@@ -250,7 +245,6 @@ class GameViewController: UIViewController {
         repeat {
             unique = true
             randomQuestionNumber = arc4random_uniform(UInt32(question.count)) + 1
-            //let item = self.realm.objects(Item).filter("id = \(randomQuestionNumber)").first
             for q in tabQuestion {
 
                 if q.id == Int(randomQuestionNumber) {
