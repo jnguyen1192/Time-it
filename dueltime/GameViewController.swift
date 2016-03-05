@@ -26,6 +26,7 @@ class GameViewController: UIViewController {
     var isIn = false
     var lastIndex = 0
     var lastArea = CGRect()
+    
     var nbQuestion : Int {
         get {
             return tabQuestion.count
@@ -38,58 +39,89 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
       
         tap = UIPanGestureRecognizer(target: self, action: Selector("handlePan"))
-        ///Met à jour compteur nbTour pour chaque client
-        ///nbTour détermine qui fait pickCarte
-
-        
-
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        //self.ref.childByAppendingPath("Tour").updateChildValues(["nbTour" : 0])
+        ref.childByAppendingPath("lastIndex").setValue(["lastIndex":-1])
+        ref.childByAppendingPath("ended").setValue(["end":"false"])
+
+
+        ref.childByAppendingPath("lastIndex").observeEventType(.ChildChanged, withBlock: {snap in
+            self.lastIndex = snap.value as! Int
+            if self.lastIndex >= 0 {
+                self.tabQuestion.insert(self.tabQuestion.last!, atIndex: self.lastIndex)
+                self.tabQuestion.removeLast()
+                
+                if self.nbTour > 2 {
+                    if self.lastIndex < 2  {
+                        let tag = self.tabQuestion.last?.id
+                        self.view.viewWithTag(tag!)?.removeFromSuperview()
+                        self.tabQuestion.removeLast()
+                    } else {
+                        let tag = self.tabQuestion.first?.id
+                        self.view.viewWithTag(tag!)?.removeFromSuperview()
+                        self.tabQuestion.removeFirst()
+                    }
+                    
+                }
+                
+                
+                
+                if self.isMaster() {
+                    self.updateTour()
+                }
+            }
+           
+            
+        })
+        
+        ref.childByAppendingPath("ended").observeEventType(.ChildChanged, withBlock: {snap in
+            let perdu = UILabel(frame: CGRect(x: 0, y:0 , width: 100, height: 100))
+            perdu.backgroundColor = UIColor.blueColor()
+            self.view.addSubview(perdu)
+        })
 
         
         ref.childByAppendingPath("Tour").observeEventType(.ChildChanged, withBlock: {snap in
+            
+            if self.nbTour > 1 {
+                self.tabQuestion.sortInPlace({ (A, B) -> Bool in
+                    return Int(A.answer!)! < Int(B.answer!)!
+                })
 
-
-            self.nbTour++
+            }
+            self.nbTour = snap.value as! Int
             if self.isMaster() {
                 self.pickCarte()
             }
         })
         
         ref.childByAppendingPath("Question").observeEventType(.ChildAdded, withBlock: {snap in
-
             let question = self.realm.objects(Item).filter("id = \(snap.value)").first
             self.tabQuestion.append(question!)
-           
             self.addQuestion()
             if self.nbTour == 1  {
                 self.tabQuestion.sortInPlace({ (A, B) -> Bool in
                     return Int(A.id) < Int(B.id)
                 })
-                print(self.tabQuestion[0].id)
+
                 let label = self.view.viewWithTag(self.tabQuestion[0].id) as! UILabel
                 label.text = "\(self.tabQuestion.first!.question!)\n\(self.tabQuestion.first!.answer!)"
-                
             }
             
             self.currentQuestion = self.tabQuestion.last
-
             self.placeQuestion()
             self.placeDropArea()
-            
             if self.nbTour == 0 {
                 self.nbTour++
-                
                 if self.isMaster() {
                     self.pickCarte()
                     
                 }
             }
-                  })
+        })
        
 
         //Init game
@@ -119,10 +151,10 @@ class GameViewController: UIViewController {
 
                 if i == 0 {
                     self.view.viewWithTag(question.id)?.center = self.view.center
-                    self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x - (self.view.viewWithTag(question.id)?.frame.width)! - 15
+                    self.view.viewWithTag(question.id)?.frame.origin.x -= 50
                 } else {
                     self.view.viewWithTag(question.id)?.center = self.view.center
-                    self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x + 15
+                    self.view.viewWithTag(question.id)?.frame.origin.x += 50
                 }
                 i++
 
@@ -132,14 +164,13 @@ class GameViewController: UIViewController {
             for question in self.tabQuestion.dropLast() {
                 if i == 0 {
                     self.view.viewWithTag(question.id)?.center = self.view.center
-                    self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x - (self.view.viewWithTag(question.id)?.frame.width)! - 15
-                        
+                    self.view.viewWithTag(question.id)?.frame.origin.x -= 100
                 } else if i == 1  {
                     self.view.viewWithTag(question.id)?.center = self.view.center
                         
                 } else {
                     self.view.viewWithTag(question.id)?.center = self.view.center
-                    self.view.viewWithTag(question.id)?.frame.origin.x = self.view.center.x + (self.view.viewWithTag(question.id)?.frame.width)! + 15
+                    self.view.viewWithTag(question.id)?.frame.origin.x += 100
                         
                 }
                 i++
@@ -149,6 +180,7 @@ class GameViewController: UIViewController {
     }
     
     func placeDropArea() {
+        ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":-1])
 
         if self.nbTour == 1 {
             if let question = tabQuestion.first {
@@ -157,39 +189,39 @@ class GameViewController: UIViewController {
                 let dragAreaTwo = CGRect(x: label!.frame.origin.x + label!.frame.width + 15, y: label!.frame.origin.y, width: label!.frame.width, height: label!.frame.height)
                 self.dragArea.append(dragAreaOne)
                 self.dragArea.append(dragAreaTwo)
+              
                 
-                for area in dragArea {
-                    let view = UIView(frame: area)
-                    view.backgroundColor = UIColor.greenColor()
-                    self.view.addSubview(view)
-                }
             }
             
         }
         else if nbTour == 2 {
             //Drag Area Config
             self.dragArea.removeAll()
-            let dragAreaOne = CGRect(x: self.view.center.x - 40, y: (self.view.viewWithTag(self.tabQuestion.first!.id)?.frame.origin.y)!, width: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.width)!, height: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.height)!)
-            let dragAreaTwo = CGRect(x: (self.view.viewWithTag(self.tabQuestion.first!.id)?.frame.origin.x)! - 60, y: (self.view.viewWithTag(self.tabQuestion.first!.id)?.frame.origin.y)!, width: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.width)!, height: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.height)!)
-            let dragAreaThree = CGRect(x: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.origin.x)! + 60, y: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.origin.y)!, width: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.width)!, height: (self.view.viewWithTag(self.tabQuestion.last!.id)?.frame.height)!)
+
+            let label = UIView(frame: CGRect(x: 0, y: 0, width: 75, height: 75))
+            label.center = self.view.center
+            let dragAreaOne = CGRect(x: label.frame.origin.x - 100, y: label.frame.origin.y, width: (label.frame.width), height: (label.frame.height))
+            let dragAreaTwo = CGRect(x: label.frame.origin.x, y: label.frame.origin.y, width: (label.frame.width), height: (label.frame.height))
+            let dragAreaThree = CGRect(x: label.frame.origin.x + 100, y: label.frame.origin.y, width: (label.frame.width), height: (label.frame.height))
             self.dragArea.append(dragAreaOne)
             self.dragArea.append(dragAreaTwo)
             self.dragArea.append(dragAreaThree)
-            self.dragArea.sortInPlace({ (A, B) -> Bool in
-                A.origin.x < B.origin.x
-            })
             
         }
-        else if nbTour == 2 {
+        else if nbTour >= 3 {
+            self.dragArea.removeAll()
+            let label = UIView(frame: CGRect(x: 0, y: 0, width: 75, height: 75))
+            label.center = self.view.center
             
+            let dragAreaOne = CGRect(x: 0, y: label.frame.origin.y, width: 75, height: 75)
+            let dragAreaTwo = CGRect(x: label.frame.origin.x - 50, y: label.frame.origin.y, width: 75, height: 75)
+            let dragAreaThree = CGRect(x: label.frame.origin.x + 50, y: label.frame.origin.y, width: 75, height: 75)
+            let dragAreaFour = CGRect(x: UIScreen.mainScreen().bounds.width - 75, y: label.frame.origin.y, width: 75, height: 75)
             
-            if let question = self.currentQuestion {
-                let label = self.view.viewWithTag(question.id) as! UILabel
-                label.text = "\(label.text!)"
-                
-                
-                
-            }
+            self.dragArea.append(dragAreaOne)
+            self.dragArea.append(dragAreaTwo)
+            self.dragArea.append(dragAreaThree)
+            self.dragArea.append(dragAreaFour)
             
         }
         
@@ -219,16 +251,18 @@ class GameViewController: UIViewController {
         repeat {
             unique = true
             randomQuestionNumber = arc4random_uniform(UInt32(question.count)) + 1
-
+            //let item = self.realm.objects(Item).filter("id = \(randomQuestionNumber)").first
             for q in tabQuestion {
+
                 if q.id == Int(randomQuestionNumber) {
                     unique = false
                 }
             }
         } while !unique
         
-        ref.childByAppendingPath("Question").updateChildValues(["\(randomQuestionNumber)":"\(randomQuestionNumber)"])
+        ref.childByAppendingPath("Question").updateChildValues(["\(nbTour)":"\(randomQuestionNumber)"])
     }
+    
     
 
     
@@ -297,52 +331,56 @@ class GameViewController: UIViewController {
                         }
                         i++
                     }
-
-
                     if lastIndex == 0 {
-
                         for question in tabQuestion.dropLast() {
                             self.view.viewWithTag(question.id)?.frame.origin.x += 50
                         }
-                    } else if lastIndex == 1 {
+                    }
+                    else if lastIndex == 1 {
                         self.view.viewWithTag(tabQuestion.first!.id)?.frame.origin.x -= 50
                         for question in tabQuestion.dropLast().dropFirst() {
                             self.view.viewWithTag(question.id)?.frame.origin.x += 50
                         }
-                    } else if lastIndex == 2{
-                        if nbQuestion == 3 {
+                    }
+                    else if lastIndex == 2{
+                        if nbTour == 2 {
                             for question in tabQuestion.dropLast() {
-                                self.view.viewWithTag(question.id)?.frame.origin.x -= 50
+                                self.view.viewWithTag(question.id)!.frame.origin.x -= 50
                             }
-                            self.view.viewWithTag(tabQuestion.last!.id)?.frame.origin.x += 50
+
                         } else {
-                            for question in tabQuestion {
-                                self.view.viewWithTag(question.id)?.frame.origin.x -= 50
+
+                            for question in tabQuestion.dropLast() {
+                                self.view.viewWithTag(question.id)!.frame.origin.x -= 50
+                            }
+                            if let lastQuestion = tabQuestion.dropLast().last {
+
+                                self.view.viewWithTag(lastQuestion.id)!.frame.origin.x = UIScreen.mainScreen().bounds.width - 75
                             }
 
                         }
+                    }
                        
-                    } else {
-                        for question in tabQuestion {
+                    
+                    else {
+                        for question in tabQuestion.dropLast() {
                             self.view.viewWithTag(question.id)?.frame.origin.x -= 50
                         }
                     }
                     
                 }
-            } else {
+            }
+    
+        else {
                 
                 if isIn  {
                     isIn = false
 
-                    goToInitPosition()
+                    placeQuestion()
                 }
             }
-            
         }
         else if self.tap!.state == .Ended {
-            var areaIndex : Int?
-            var i = 0
-            
             if let area = goalReached() {
                 let areaCenterX = area.origin.x + area.width/2
                 let areaCenterY = area.origin.y + area.height/2
@@ -352,18 +390,12 @@ class GameViewController: UIViewController {
                 })
                 
                 self.tap!.view!.userInteractionEnabled = false
-                for areaD in dragArea {
-                    if area == areaD {
-                        areaIndex = i
-                    }
-                    i++
-                }
                 
-
-                self.tabQuestion.insert(currentQuestion!, atIndex: areaIndex!)
-
                 if isCorrect() {
-                    updateTour()
+                    ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":lastIndex])
+                }
+                else {
+                    ref.childByAppendingPath("ended").updateChildValues(["end":"true"])
                 }
                 
             } else {
@@ -378,40 +410,20 @@ class GameViewController: UIViewController {
         
     }
     
-    func goToInitPosition() {
-        if nbTour == 1 {
-            self.view.viewWithTag((tabQuestion.first?.id)!)?.center = self.view.center
-        } else if nbTour == 2 {
-            let view1  = self.view.viewWithTag((tabQuestion.first?.id)!)
-            let view2 = self.view.viewWithTag((tabQuestion.last?.id)!)
-
-            self.view.viewWithTag((tabQuestion.first?.id)!)?.center = self.view.center
-            self.view.viewWithTag((tabQuestion.last?.id)!)?.center = self.view.center
-
-            self.view.viewWithTag((tabQuestion.first?.id)!)?.center.x = self.view.center.x - 15 - (view1?.frame.width)!/2
-            self.view.viewWithTag((tabQuestion.last?.id)!)?.center.x = self.view.center.x + 15 + (view1?.frame.width)!/2
-
-        } else {
-            
-        }
-        
-     
-    }
     
     func isCorrect() -> Bool{
         
-        var sortedArray = tabQuestion
-        sortedArray.sortInPlace { (A, B) -> Bool in
+        var notSortedArray = tabQuestion
+        notSortedArray.insert(tabQuestion.last!, atIndex: lastIndex)
+        notSortedArray.removeLast()
+
+        let sortedArray = notSortedArray.sort { (A, B) -> Bool in
             return Int(A.answer!)! < Int(B.answer!)!
         }
-
-        if sortedArray == tabQuestion {
+        
+        if sortedArray == notSortedArray {
             return true
-            
         } else {
-            let perdu = UILabel(frame: CGRect(x: 0, y:0 , width: 100, height: 100))
-            perdu.backgroundColor = UIColor.blueColor()
-            self.view.addSubview(perdu)
             return false
         }
     }
@@ -424,7 +436,7 @@ class GameViewController: UIViewController {
             let areaCenterY = area.origin.y + area.height/2
 
             let distanceFromGoal: CGFloat = sqrt(pow(self.tap!.view!.center.x - areaCenterX, 2) + pow(self.tap!.view!.center.y - areaCenterY, 2))
-            if distanceFromGoal < self.tap!.view!.bounds.size.width / 2 {
+            if distanceFromGoal < self.tap!.view!.bounds.size.width / 3 {
                 
                 return area
             }
