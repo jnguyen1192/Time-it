@@ -85,13 +85,9 @@ class GameViewController: UIViewController {
 
         
         ref.childByAppendingPath("Tour").observeEventType(.ChildChanged, withBlock: {snap in
-            
-            if self.nbTour > 1 {
-                self.tabQuestion.sortInPlace({ (A, B) -> Bool in
-                    return Int(A.answer!)! < Int(B.answer!)!
-                })
-
-            }
+            self.tabQuestion.sortInPlace({ (A, B) -> Bool in
+                return Int(A.answer!)! < Int(B.answer!)!
+            })
             self.nbTour = snap.value as! Int
             if self.isMaster() {
                 self.pickCarte()
@@ -103,10 +99,11 @@ class GameViewController: UIViewController {
             self.tabQuestion.append(question!)
             self.addQuestion()
             if self.nbTour == 1  {
+                /*
                 self.tabQuestion.sortInPlace({ (A, B) -> Bool in
                     return Int(A.id) < Int(B.id)
                 })
-
+*/
                 let label = self.view.viewWithTag(self.tabQuestion[0].id) as! UILabel
                 label.text = "\(self.tabQuestion.first!.question!)\n\(self.tabQuestion.first!.answer!)"
             }
