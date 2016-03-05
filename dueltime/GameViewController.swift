@@ -39,47 +39,41 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
       
         tap = UIPanGestureRecognizer(target: self, action: Selector("handlePan"))
-        ///Met à jour compteur nbTour pour chaque client
-        ///nbTour détermine qui fait pickCarte
-
-        
-
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        ref.childByAppendingPath("lastIndex").setValue(["lastIndex":"caca"])
+        ref.childByAppendingPath("lastIndex").setValue(["lastIndex":-1])
         ref.childByAppendingPath("ended").setValue(["end":"false"])
 
 
         ref.childByAppendingPath("lastIndex").observeEventType(.ChildChanged, withBlock: {snap in
-            print("lastIndex event processing")
             self.lastIndex = snap.value as! Int
-            self.tabQuestion.insert(self.tabQuestion.last!, atIndex: self.lastIndex)
-            self.tabQuestion.removeLast()
-            
-            if self.nbTour > 2 {
-                print("delete")
-                if self.lastIndex < 2  {
-                    print("delete last")
-                    let tag = self.tabQuestion.last?.id
-                    self.view.viewWithTag(tag!)?.removeFromSuperview()
-                    self.tabQuestion.removeLast()
-                } else {
-                    print("delete first")
-                    let tag = self.tabQuestion.first?.id
-                    self.view.viewWithTag(tag!)?.removeFromSuperview()
-                    self.tabQuestion.removeFirst()
+            if self.lastIndex >= 0 {
+                self.tabQuestion.insert(self.tabQuestion.last!, atIndex: self.lastIndex)
+                self.tabQuestion.removeLast()
+                
+                if self.nbTour > 2 {
+                    if self.lastIndex < 2  {
+                        let tag = self.tabQuestion.last?.id
+                        self.view.viewWithTag(tag!)?.removeFromSuperview()
+                        self.tabQuestion.removeLast()
+                    } else {
+                        let tag = self.tabQuestion.first?.id
+                        self.view.viewWithTag(tag!)?.removeFromSuperview()
+                        self.tabQuestion.removeFirst()
+                    }
+                    
                 }
                 
+                
+                
+                if self.isMaster() {
+                    self.updateTour()
+                }
             }
-
-
-            
-            if self.isMaster() {
-                self.updateTour()
-            }
+           
             
         })
         
@@ -92,25 +86,21 @@ class GameViewController: UIViewController {
         
         ref.childByAppendingPath("Tour").observeEventType(.ChildChanged, withBlock: {snap in
             
-            self.tabQuestion.sortInPlace({ (A, B) -> Bool in
-                return Int(A.answer!)! < Int(B.answer!)!
-            })
-            
-            print("\(self.nbTour) : ref tour after sort")
+            if self.nbTour > 1 {
+                self.tabQuestion.sortInPlace({ (A, B) -> Bool in
+                    return Int(A.answer!)! < Int(B.answer!)!
+                })
+
+            }
             self.nbTour = snap.value as! Int
-            print("ref tour after snap.value")
             if self.isMaster() {
-                print("\(self.nbTour) : master pick carte")
                 self.pickCarte()
             }
         })
         
         ref.childByAppendingPath("Question").observeEventType(.ChildAdded, withBlock: {snap in
-            print("obsever question start")
             let question = self.realm.objects(Item).filter("id = \(snap.value)").first
             self.tabQuestion.append(question!)
-           
-            print("addQuestion")
             self.addQuestion()
             if self.nbTour == 1  {
                 self.tabQuestion.sortInPlace({ (A, B) -> Bool in
@@ -122,15 +112,10 @@ class GameViewController: UIViewController {
             }
             
             self.currentQuestion = self.tabQuestion.last
-            
-            print("placeQuestion")
             self.placeQuestion()
-            print("dropQuestion")
             self.placeDropArea()
-            print("endQuestion")
             if self.nbTour == 0 {
                 self.nbTour++
-                print("question pickCarte")
                 if self.isMaster() {
                     self.pickCarte()
                     
@@ -195,6 +180,7 @@ class GameViewController: UIViewController {
     }
     
     func placeDropArea() {
+        ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":-1])
 
         if nbTour == 1 {
             if let _ = tabQuestion.first {
@@ -267,18 +253,16 @@ class GameViewController: UIViewController {
         repeat {
             unique = true
             randomQuestionNumber = arc4random_uniform(UInt32(question.count)) + 1
-
+            //let item = self.realm.objects(Item).filter("id = \(randomQuestionNumber)").first
             for q in tabQuestion {
-                print("boucle infinie")
+
                 if q.id == Int(randomQuestionNumber) {
                     unique = false
                 }
             }
         } while !unique
         
-        print("Fin boucle infinie")
-
-        ref.childByAppendingPath("Question").updateChildValues(["\(randomQuestionNumber)":"\(randomQuestionNumber)"])
+        ref.childByAppendingPath("Question").updateChildValues(["\(nbTour)":"\(randomQuestionNumber)"])
     }
     
     
@@ -400,9 +384,7 @@ class GameViewController: UIViewController {
             }
         }
         else if self.tap!.state == .Ended {
-            print("drop")
             if let area = goalReached() {
-                print("areaReached")
                 let areaCenterX = area.origin.x + area.width/2
                 let areaCenterY = area.origin.y + area.height/2
 
@@ -413,12 +395,9 @@ class GameViewController: UIViewController {
                 self.tap!.view!.userInteractionEnabled = false
                 
                 if isCorrect() {
-                    print("Win")
                     ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":lastIndex])
-
                 }
                 else {
-                    print("lose")
                     ref.childByAppendingPath("ended").updateChildValues(["end":"true"])
                 }
                 
@@ -436,7 +415,6 @@ class GameViewController: UIViewController {
     
     
     func isCorrect() -> Bool{
-        print("isCorrect function")
         
         var notSortedArray = tabQuestion
         notSortedArray.insert(tabQuestion.last!, atIndex: lastIndex)
