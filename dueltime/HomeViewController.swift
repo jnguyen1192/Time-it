@@ -108,6 +108,41 @@ class HomeViewController: UIViewController {
         item4.question = "Lait"
         item4.answer = "9999"
         
+        let item5 = Item()
+        item5.id = 5
+        item5.question = "truc1"
+        item5.answer = "1"
+        
+        let item6 = Item()
+        item6.id = 6
+        item6.question = "truc3"
+        item6.answer = "3"
+
+        
+        let item7 = Item()
+        item7.id = 7
+        item7.question = "truc4"
+        item7.answer = "4"
+
+        
+        let item8 = Item()
+        item8.id = 8
+        item8.question = "truc5"
+        item8.answer = "5"
+
+        
+        let item9 = Item()
+        item9.id = 9
+        item9.question = "truc6"
+        item9.answer = "6"
+
+        
+        let item10 = Item()
+        item10.id = 10
+        item10.question = "truc10"
+        item10.answer = "10"
+
+        
         let realm = try! Realm()
         try! realm.write {
             realm.deleteAll()
@@ -116,6 +151,14 @@ class HomeViewController: UIViewController {
             realm.add(item2)
             realm.add(item3)
             realm.add(item4)
+            realm.add(item5)
+            realm.add(item6)
+            realm.add(item7)
+            realm.add(item8)
+            realm.add(item9)
+            realm.add(item10)
+            
+            
             print("Fin ajout")
         }
 
