@@ -131,14 +131,7 @@ class HomeViewController: UIViewController {
             }
 
         }
-        /*
-        let item1 = Item()
-        item1.id = 1
-        item1.question = "Toilette"
-        item1.answer = "1239"
-        */
-
-
+ 
         // Do any additional setup after loading the view, typically from a nib.
     }
 

@@ -238,12 +238,12 @@ class GameViewController: UIViewController {
         
         var unique : Bool
         var randomQuestionNumber : UInt32
-        var answer : String
+
         
         repeat {
             unique = true
             randomQuestionNumber = arc4random_uniform(UInt32(question.count))
-            var questionPicked = self.realm.objects(Item).filter("id = \(randomQuestionNumber)").first
+            let questionPicked = self.realm.objects(Item).filter("id = \(randomQuestionNumber)").first
 
             for q in tabQuestion {
 
