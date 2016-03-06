@@ -4,7 +4,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'dueltime' do
-pod 'TableViewDragger', '~> 0.0'
+pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
 pod 'RealmSwift'
 pod 'Firebase', '>= 2.5.0'
 end

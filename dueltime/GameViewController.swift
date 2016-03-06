@@ -66,9 +66,6 @@ class GameViewController: UIViewController {
                     }
                     
                 }
-                
-                
-                
                 if self.isMaster() {
                     self.updateTour()
                 }
@@ -241,13 +238,16 @@ class GameViewController: UIViewController {
         
         var unique : Bool
         var randomQuestionNumber : UInt32
+        var answer : String
         
         repeat {
             unique = true
-            randomQuestionNumber = arc4random_uniform(UInt32(question.count)) + 1
+            randomQuestionNumber = arc4random_uniform(UInt32(question.count))
+            var questionPicked = self.realm.objects(Item).filter("id = \(randomQuestionNumber)").first
+
             for q in tabQuestion {
 
-                if q.id == Int(randomQuestionNumber) {
+                if q.answer == questionPicked?.answer {
                     unique = false
                 }
             }
