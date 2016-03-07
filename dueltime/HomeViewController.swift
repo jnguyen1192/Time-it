@@ -87,6 +87,11 @@ class HomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.view.addBackground("accueil time it")
+        
+        
+        
         var i = 0
         if let path = NSBundle.mainBundle().pathForResource("data", ofType: "json") {
             if let jsonData = NSData(contentsOfFile: path) {
@@ -110,7 +115,7 @@ class HomeViewController: UIViewController {
                         
                     }
                 }
-                
+            
                 orderedJson.sortInPlace({ (A, B) -> Bool in
                     if A.answer == B.answer {
                         return A.id < B.id
