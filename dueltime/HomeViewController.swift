@@ -126,6 +126,7 @@ class HomeViewController: UIViewController {
                         realm.add(item)
                     }
                 }
+                print(realm.objects(Item).count)
                 
 
             }
