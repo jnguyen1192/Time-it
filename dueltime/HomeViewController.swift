@@ -9,6 +9,8 @@
 import UIKit
 import Firebase
 import RealmSwift
+import SwiftyJSON
+
 
 class HomeViewController: UIViewController {
     
@@ -94,34 +96,7 @@ class HomeViewController: UIViewController {
         item1.id = 1
         item1.question = "Toilette"
         item1.answer = "1239"
-        
-        let item2 = Item()
-        item2.id = 2
-        item2.question = "Eau"
-        item2.answer = "2"
-
-        
-        let item3 = Item()
-        item3.id = 3
-        item3.question = "Papier"
-        item3.answer = "934"
-
-        let item4 = Item()
-        item4.id = 4
-        item4.question = "Lait"
-        item4.answer = "9999"
-        
-        let realm = try! Realm()
-        try! realm.write {
-            realm.deleteAll()
-            print("Début ajout")
-            realm.add(item1)
-            realm.add(item2)
-            realm.add(item3)
-            realm.add(item4)
-            print("Fin ajout")
-        }
-
+        */
 
 
         // Do any additional setup after loading the view, typically from a nib.

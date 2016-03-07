@@ -15,6 +15,7 @@
 		E5603F2B1C48F24B00738C3E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5603F2A1C48F24B00738C3E /* Assets.xcassets */; };
 		E5603F2E1C48F24B00738C3E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E5603F2C1C48F24B00738C3E /* LaunchScreen.storyboard */; };
 		E58548031C4908EE00592B16 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58548021C4908EE00592B16 /* GameViewController.swift */; };
+		E5A9F0641C8B457C004AD88F /* data.json in Resources */ = {isa = PBXBuildFile; fileRef = E5A9F0631C8B457C004AD88F /* data.json */; };
 		FEF66D80DCE25C160B3A8126 /* Pods_dueltime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E5A7DFBA29E680470409BAB /* Pods_dueltime.framework */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +33,7 @@
 		E5603F2D1C48F24B00738C3E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E5603F2F1C48F24B00738C3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E58548021C4908EE00592B16 /* GameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
+		E5A9F0631C8B457C004AD88F /* data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = data.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 		E5603F221C48F24B00738C3E /* dueltime */ = {
 			isa = PBXGroup;
 			children = (
+				E5A9F0631C8B457C004AD88F /* data.json */,
 				E5603F2C1C48F24B00738C3E /* LaunchScreen.storyboard */,
 				E5603F231C48F24B00738C3E /* AppDelegate.swift */,
 				E5603F2A1C48F24B00738C3E /* Assets.xcassets */,
@@ -162,6 +165,7 @@
 				E5603F2E1C48F24B00738C3E /* LaunchScreen.storyboard in Resources */,
 				E5603F2B1C48F24B00738C3E /* Assets.xcassets in Resources */,
 				E5603F291C48F24B00738C3E /* Main.storyboard in Resources */,
+				E5A9F0641C8B457C004AD88F /* data.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
