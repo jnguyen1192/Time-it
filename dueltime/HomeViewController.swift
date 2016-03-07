@@ -88,8 +88,8 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.addBackground("accueil time it")
         
+        self.view.addBackground("accueil")
         
         
         var i = 0
