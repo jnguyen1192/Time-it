@@ -86,6 +86,9 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.addBackground("accueil time it")
+        
+        
         
         let item1 = Item()
         item1.id = 1
