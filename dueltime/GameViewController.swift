@@ -415,6 +415,8 @@ class GameViewController: UIViewController {
         let sortedArray = notSortedArray.sort { (A, B) -> Bool in
             return Int(A.answer!)! < Int(B.answer!)!
         }
+        print(sortedArray)
+        print(notSortedArray)
         
         if sortedArray == notSortedArray {
             return true
