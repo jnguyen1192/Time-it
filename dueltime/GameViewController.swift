@@ -238,8 +238,6 @@ class GameViewController: UIViewController {
         
         var unique : Bool
         var randomQuestionNumber : UInt32
-
-        
         repeat {
             unique = true
             randomQuestionNumber = arc4random_uniform(UInt32(question.count))
