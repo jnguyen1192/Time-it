@@ -88,10 +88,55 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         self.view.addBackground("accueil time it")
         
         
-        
+        var i = 0
+        if let path = NSBundle.mainBundle().pathForResource("data", ofType: "json") {
+            if let jsonData = NSData(contentsOfFile: path) {
+                let json = JSON(data: jsonData)
+                let realm = try! Realm()
+                try! realm.write{
+                    realm.deleteAll()
+                }
+                var orderedJson = [Item]()
+                
+                
+                for (index,subJson):(String, JSON) in json {
+                    
+                    for (key, subJsonBis):(String, JSON) in subJson {
+                        let item = Item()
+                        item.id = i++
+                        item.answer = index
+                        item.question = subJsonBis[key].string
+                        orderedJson.append(item)
+                        // realm.add(item)
+                        
+                    }
+                }
+                
+                orderedJson.sortInPlace({ (A, B) -> Bool in
+                    if A.answer == B.answer {
+                        return A.id < B.id
+                    }else {
+                        return Int(A.answer!)! < Int(B.answer!)!
+
+                    }
+                })
+                i=0
+                for item in orderedJson {
+                    item.id = i++
+                    try! realm.write{
+                        realm.add(item)
+                    }
+                }
+                
+
+            }
+
+        }
+        /*
         let item1 = Item()
         item1.id = 1
         item1.question = "Toilette"
