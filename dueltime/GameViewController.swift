@@ -37,6 +37,9 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        self.view.addBackground("interface time it")
       
         tap = UIPanGestureRecognizer(target: self, action: Selector("handlePan"))
     }
