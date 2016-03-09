@@ -10,13 +10,17 @@ import UIKit
 import Firebase
 import RealmSwift
 import SwiftyJSON
+import Hue
+import Mortar
 
 
 class HomeViewController: UIViewController {
     
     var master : Bool?
-    @IBOutlet weak var findPlayerOutlet: UIButton!
-    @IBAction func findPlayer(sender: AnyObject) {
+    var findPlayerOutlet = UIButton()
+    var readyLabel = UILabel()
+
+    func findPlayer(sender: UIButton!) {
         let roomEmpty = Firebase(url: "https://duel-time.firebaseio.com/Room/Empty")
         roomEmpty.observeSingleEventOfType(.Value, withBlock: {snap in
             //Pas de room vide
@@ -84,13 +88,59 @@ class HomeViewController: UIViewController {
 
     }
 
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        findPlayerOutlet.backgroundColor = UIColor.hex("1D6C5D")
+        findPlayerOutlet.setTitleColor(UIColor.hex("F0F5F7"), forState: .Normal)
+        findPlayerOutlet.setTitle("Time it !", forState: .Normal)
+        findPlayerOutlet.layer.cornerRadius = 33
+        findPlayerOutlet.layer.borderWidth = 1
+        findPlayerOutlet.layer.borderColor = UIColor.hex("3C3F3F").CGColor
+        findPlayerOutlet.titleLabel?.font = UIFont (name: "Roboto-Light", size: 50)
+
+
+        findPlayerOutlet.m_width |=| self.view.m_width * 71 / 100
+        findPlayerOutlet.m_height |=| self.view.m_height * 13 / 100
+        findPlayerOutlet.m_centerX |=| self.view
+        findPlayerOutlet.m_centerY |=| self.view.m_centerY - 50
+        
+        
+        let readyString = "Ready to time it ?"
+        let attributedString = NSMutableAttributedString(string: readyString)
+        attributedString.addAttribute(NSKernAttributeName, value: CGFloat(0.6), range: NSRange(location: 0, length: readyString.characters.count))
+        
+        readyLabel.attributedText = attributedString
+        
+        readyLabel.textColor = UIColor.hex("3C3F3F")
+        readyLabel.textAlignment = .Center
+        readyLabel.font = UIFont(name: "Roboto-Light", size: 23)
+
+        
+        readyLabel.m_width |=| self.view
+        readyLabel.m_height |=| 30
+        readyLabel.m_bottom |=| findPlayerOutlet.m_top - 75
+        
+
+
+
+
+
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+
+        findPlayerOutlet  = UIButton(type: UIButtonType.RoundedRect) as UIButton
+        findPlayerOutlet.frame = CGRectMake(0, 0, 0, 0)
+        findPlayerOutlet.addTarget(self, action: "findPlayer:", forControlEvents: UIControlEvents.TouchUpInside)
         
-        self.view.addBackground("accueil")
+        readyLabel.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
         
+        self.view.addSubview(findPlayerOutlet)
+        self.view.addSubview(readyLabel)
+        
+        self.view.addBackground("fondAccueuil")
         
         var i = 0
         if let path = NSBundle.mainBundle().pathForResource("data", ofType: "json") {
