@@ -27,3 +27,14 @@ extension UIView {
         self.sendSubviewToBack(imageViewBackground)
     }
 }
+
+class myLabel : UILabel {
+    override func layoutSubviews() {
+        // 1. Get the label to set its frame correctly:
+        super.layoutSubviews()
+        
+        // 2. Now the frame is set we can get the correct width
+        // and set it to the preferredMaxLayoutWidth.
+        self.preferredMaxLayoutWidth = self.frame.width
+    }
+}

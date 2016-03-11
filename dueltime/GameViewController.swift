@@ -9,6 +9,8 @@
 import UIKit
 import Firebase
 import RealmSwift
+import Hue
+import Mortar
 
 
 
@@ -26,6 +28,9 @@ class GameViewController: UIViewController {
     var isIn = false
     var lastIndex = 0
     var lastArea = CGRect()
+    let bottomView = UIView()
+    var constraints : [MortarConstraint] = []
+
     
     var nbQuestion : Int {
         get {
@@ -38,14 +43,31 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        self.view.addBackground("interface")
+    
       
         tap = UIPanGestureRecognizer(target: self, action: Selector("handlePan"))
     }
     
+    override func viewDidLayoutSubviews() {
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRectMake(0, 0, bottomView.bounds.size.width, 1)
+        topBorder.backgroundColor = UIColor.hex("000").CGColor
+        bottomView.layer.addSublayer(topBorder)
+
+    }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
+        self.view.backgroundColor = UIColor.hex("D2DADF")
+        self.view.addSubview(bottomView)
+        
+        //Bottom view setup
+        bottomView.backgroundColor = UIColor.hex("1D6C5D")
+        [bottomView.m_bottom, bottomView.m_left, bottomView.m_right] |=| self.view
+        bottomView.m_height |=| self.view.m_height * 30 / 100
+        
         
         ref.childByAppendingPath("lastIndex").setValue(["lastIndex":-1])
         ref.childByAppendingPath("ended").setValue(["end":"false"])
@@ -261,9 +283,8 @@ class GameViewController: UIViewController {
 
     
     func addQuestion() {
-
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 75, height: 75))
-        label.numberOfLines = 2
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 95, height: 125))
+        let label = myLabel(frame: CGRect(x: 0, y: 0, width: 95, height: 125))
         
         if let question = tabQuestion.last?.question {
             if let id = tabQuestion.last?.id {
@@ -272,11 +293,32 @@ class GameViewController: UIViewController {
             }
         }
 
+        self.view.addSubview(view)
+        view.addSubview(label)
+
+        constraints = [
+            label.m_edges |=| view ! .Required,
+            label.m_size |=| view ! .Required
+        ]
+        
+        constraints.activate()
+
+        
+        view.backgroundColor = UIColor.hex("D2DADF")
+        view.layer.borderWidth = 2
+        view.layer.borderColor = UIColor.hex("3C3F3F").CGColor
+        view.layer.cornerRadius = 10
+        view.clipsToBounds = true
+        view.center = bottomView.center
+        
+        label.numberOfLines = 0
         label.textAlignment = .Center
-        label.backgroundColor = UIColor.redColor()
-        label.frame.origin.y = self.view.frame.height - 75
-        label.frame.origin.x = 0
-        self.view.addSubview(label)
+        label.textColor = UIColor.hex("3C3F3F")
+        label.preferredMaxLayoutWidth = 95
+
+        
+        
+        
         if self.nbTour > 0 {
 
             label.userInteractionEnabled = true
