@@ -181,7 +181,7 @@ class GameViewController: UIViewController {
    
     func placeQuestion() {
 
-        UIView.animateWithDuration(0.5, animations: {
+        
             var i = 0
             
             if self.nbTour > 0 {
@@ -230,46 +230,50 @@ class GameViewController: UIViewController {
             }
             
             if self.nbTour == 1 {
-                for question in self.tabQuestion.dropLast() {
+                UIView.animateWithDuration(0.5, animations: {
+                    for question in self.tabQuestion.dropLast() {
                     
-                    self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
-                    i++
+                        self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
+                        i++
                     
-                }
+                    }
+                })
             }
             else if self.nbTour == 2 {
-                for question in self.tabQuestion.dropLast() {
+                UIView.animateWithDuration(0.5, animations: {
+                    for question in self.tabQuestion.dropLast() {
                     
-                    if i == 0 {
-                        self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
-                        self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x -= 50
-                    } else {
-                        self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
-                        self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x += 50
+                        if i == 0 {
+                            self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
+                            self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x -= 50
+                        } else {
+                            self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
+                            self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x += 50
+                        }
+                        i++
                     }
-                    i++
-                    
-                }
-                
+                })
             } else if self.nbTour >= 3 {
-                for question in self.tabQuestion.dropLast() {
-                    if i == 0 {
-                        self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
-                        self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x -= 100
-                    } else if i == 1  {
-                        self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
+                UIView.animateWithDuration(0.5, animations: {
+                    for question in self.tabQuestion.dropLast() {
+                        if i == 0 {
+                            self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
+                            self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x -= 100
+                        } else if i == 1  {
+                            self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
                         
-                    } else {
-                        self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
-                        self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x += 100
+                        } else {
+                            self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
+                            self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x += 100
                         
-                    }
-                    i++
+                        }
+                        i++
                     
-                }
-            }
-
-        })
+        
+                    }
+                })
+        }
+        
     }
     
     func placeDropArea() {
