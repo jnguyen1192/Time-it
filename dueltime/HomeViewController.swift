@@ -116,9 +116,13 @@ class HomeViewController: UIViewController {
         readyLabel.font = UIFont(name: "Roboto-Light", size: 23)
 
         
-        readyLabel.m_width |=| self.view
-        readyLabel.m_height |=| 30
-        readyLabel.m_bottom |=| findPlayerOutlet.m_top - 75
+        let _ = [
+            readyLabel.m_width |=| self.view,
+            readyLabel.m_height |=| 30,
+            readyLabel.m_centerX |=| self.view,
+            readyLabel.m_top |=| self.view.m_bottom * 21 / 100
+        ] ~~ .Activated
+        
         
 
 
