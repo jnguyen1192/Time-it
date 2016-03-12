@@ -181,92 +181,95 @@ class GameViewController: UIViewController {
    
     func placeQuestion() {
 
-        var i = 0
-        
-        if nbTour > 0 {
-            for question in self.tabQuestion.dropLast() {
-                if let label = self.view.viewWithTag(question.id) as? UILabel {
-                    label.textColor = UIColor.hex("F0F5F7")
-                    let view = self.view.viewWithTag(Int("999\(question.id)")!)! as UIView
-                    let labelAnswer = UILabel()
-                    labelAnswer.text = question.answer!
-                    labelAnswer.textColor = UIColor.hex("F0F5F7")
-                    labelAnswer.textAlignment = .Center
-                    labelAnswer.frame.size = CGSize(width: 10,height: 10)
-                    labelAnswer.font = UIFont(name: "Roboto-Regular", size: 16)
-                    labelAnswer.sizeToFit()
-
-                    view.addSubview(labelAnswer)
-
-               
-                    let answerBorder = UIView(frame: CGRect(x: 0, y: 0, width: labelAnswer.frame.width, height: 20))
-                    answerBorder.backgroundColor = UIColor.hex("F0F5F7")
-                    view.addSubview(answerBorder)
-
-                    let _ = [
-                        labelAnswer.m_top |=| view.m_top + 3,
-                        labelAnswer.m_centerX |=| view,
+        UIView.animateWithDuration(0.5, animations: {
+            var i = 0
+            
+            if self.nbTour > 0 {
+                for question in self.tabQuestion.dropLast() {
+                    if let label = self.view.viewWithTag(question.id) as? UILabel {
+                        label.textColor = UIColor.hex("F0F5F7")
+                        let view = self.view.viewWithTag(Int("999\(question.id)")!)! as UIView
+                        let labelAnswer = UILabel()
+                        labelAnswer.text = question.answer!
+                        labelAnswer.textColor = UIColor.hex("F0F5F7")
+                        labelAnswer.textAlignment = .Center
+                        labelAnswer.frame.size = CGSize(width: 10,height: 10)
+                        labelAnswer.font = UIFont(name: "Roboto-Regular", size: 16)
+                        labelAnswer.sizeToFit()
                         
-                        answerBorder.m_top |=| labelAnswer.m_bottom + 5,
-                        answerBorder.m_height |=| 1,
-                        answerBorder.m_width |=| labelAnswer,
-                        answerBorder.m_left |=| labelAnswer,
-                        answerBorder.m_right |=| labelAnswer,
-                        
-                        label.m_centerX |=| view,
-                        label.m_centerY |=| view.m_centerY + 8 + (labelAnswer.frame.height - answerBorder.frame.height) / 2 ! .High,
-                        label.m_height |=| view.m_height - label.frame.height - answerBorder.frame.height ! .High,
-                        label.m_width |=| view
+                        view.addSubview(labelAnswer)
                         
                         
-                    ] ~~ .Activated
+                        let answerBorder = UIView(frame: CGRect(x: 0, y: 0, width: labelAnswer.frame.width, height: 20))
+                        answerBorder.backgroundColor = UIColor.hex("F0F5F7")
+                        view.addSubview(answerBorder)
+                        
+                        let _ = [
+                            labelAnswer.m_top |=| view.m_top + 3,
+                            labelAnswer.m_centerX |=| view,
+                            
+                            answerBorder.m_top |=| labelAnswer.m_bottom + 5,
+                            answerBorder.m_height |=| 1,
+                            answerBorder.m_width |=| labelAnswer,
+                            answerBorder.m_left |=| labelAnswer,
+                            answerBorder.m_right |=| labelAnswer,
+                            
+                            label.m_centerX |=| view,
+                            label.m_centerY |=| view.m_centerY + 8 + (labelAnswer.frame.height - answerBorder.frame.height) / 2 ! .High,
+                            label.m_height |=| view.m_height - label.frame.height - answerBorder.frame.height ! .High,
+                            label.m_width |=| view
+                            
+                            
+                            ] ~~ .Activated
+                        
+                        
+                        
+                    }
+                }
+                
+            }
+            
+            if self.nbTour == 1 {
+                for question in self.tabQuestion.dropLast() {
                     
-                   
-
+                    self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
+                    i++
+                    
                 }
             }
-
-        }
-        
-        if nbTour == 1 {
-            for question in self.tabQuestion.dropLast() {
-
-                self.view.viewWithTag(Int("999\(question.id)")!)!.center = gameViewCenter
-                i++
-
-            }
-        }
-        else if nbTour == 2 {
-            for question in self.tabQuestion.dropLast() {
-
-                if i == 0 {
-                    self.view.viewWithTag(Int("999\(question.id)")!)!.center = gameViewCenter
-                    self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x -= 50
-                } else {
-                    self.view.viewWithTag(Int("999\(question.id)")!)!.center = gameViewCenter
-                    self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x += 50
+            else if self.nbTour == 2 {
+                for question in self.tabQuestion.dropLast() {
+                    
+                    if i == 0 {
+                        self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
+                        self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x -= 50
+                    } else {
+                        self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
+                        self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x += 50
+                    }
+                    i++
+                    
                 }
-                i++
-
-            }
-
-        } else if nbTour >= 3 {
-            for question in self.tabQuestion.dropLast() {
-                if i == 0 {
-                    self.view.viewWithTag(Int("999\(question.id)")!)!.center = gameViewCenter
-                    self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x -= 100
-                } else if i == 1  {
-                    self.view.viewWithTag(Int("999\(question.id)")!)!.center = gameViewCenter
+                
+            } else if self.nbTour >= 3 {
+                for question in self.tabQuestion.dropLast() {
+                    if i == 0 {
+                        self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
+                        self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x -= 100
+                    } else if i == 1  {
+                        self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
                         
-                } else {
-                    self.view.viewWithTag(Int("999\(question.id)")!)!.center = gameViewCenter
-                    self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x += 100
+                    } else {
+                        self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
+                        self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x += 100
                         
+                    }
+                    i++
+                    
                 }
-                i++
-
             }
-        }
+
+        })
     }
     
     func placeDropArea() {
@@ -555,39 +558,49 @@ class GameViewController: UIViewController {
                     }
                     if lastIndex == 0 {
                         for question in tabQuestion.dropLast() {
-                            self.view.viewWithTag(Int("999\(question.id)")!)?.frame.origin.x += 50
+                            UIView.animateWithDuration(0.5, animations: {
+                                self.view.viewWithTag(Int("999\(question.id)")!)?.frame.origin.x += 50
+                            })
                         }
                     }
                     else if lastIndex == 1 {
-                        self.view.viewWithTag(Int("999\(tabQuestion.first!.id)")!)?.frame.origin.x -= 50
-                        for question in tabQuestion.dropLast().dropFirst() {
-                            self.view.viewWithTag(Int("999\(question.id)")!)?.frame.origin.x += 50
-                        }
+                        UIView.animateWithDuration(0.5, animations: {self.view.viewWithTag(Int("999\(self.tabQuestion.first!.id)")!)?.frame.origin.x -= 50
+                            for question in self.tabQuestion.dropLast().dropFirst() {
+                                self.view.viewWithTag(Int("999\(question.id)")!)?.frame.origin.x += 50
+                            }
+                        })
+                        
                     }
                     else if lastIndex == 2{
-                        if nbTour == 2 {
-                            for question in tabQuestion.dropLast() {
-                                self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x -= 50
+                        UIView.animateWithDuration(0.5, animations: {
+                            if self.nbTour == 2 {
+                                for question in self.tabQuestion.dropLast() {
+                                    self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x -= 50
+                                }
+                                
+                            } else {
+                                
+                                for question in self.tabQuestion.dropLast() {
+                                    self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x -= 50
+                                }
+                                if let lastQuestion = self.tabQuestion.dropLast().last {
+                                    
+                                    self.view.viewWithTag(Int("999\(lastQuestion.id)")!)!.frame.origin.x = UIScreen.mainScreen().bounds.width - 75
+                                }
+                                
                             }
 
-                        } else {
-
-                            for question in tabQuestion.dropLast() {
-                                self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x -= 50
-                            }
-                            if let lastQuestion = tabQuestion.dropLast().last {
-
-                                self.view.viewWithTag(Int("999\(lastQuestion.id)")!)!.frame.origin.x = UIScreen.mainScreen().bounds.width - 75
-                            }
-
-                        }
+                        })
                     }
                        
                     
                     else {
-                        for question in tabQuestion.dropLast() {
-                            self.view.viewWithTag(Int("999\(question.id)")!)?.frame.origin.x -= 50
-                        }
+                        UIView.animateWithDuration(0.5, animations: {
+                            for question in self.tabQuestion.dropLast() {
+                                self.view.viewWithTag(Int("999\(question.id)")!)?.frame.origin.x -= 50
+                            }
+                        })
+                        
                     }
                     
                 }
