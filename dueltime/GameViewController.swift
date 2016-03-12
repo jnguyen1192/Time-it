@@ -362,21 +362,7 @@ class GameViewController: UIViewController {
 
     
     func addQuestion() {
-        let labelWait = UILabel()
-        labelWait.text = "Wait for Your Turn !"
-        labelWait.tag = LabelIdentfier.Wait.rawValue
-        labelWait.textAlignment = .Center
-        labelWait.font = UIFont(name: "Roboto-Regular", size: 16)
-        labelWait.textColor = UIColor.hex("DA3227")
-        self.view.addSubview(labelWait)
-        let _ = [
-            labelWait.m_bottom |=| bottomView.m_top - 10,
-            labelWait.m_height |=| 10,
-            labelWait.m_width |=| bottomView
-            
-            ] ~~ .Activated
         
-
         
         if let labelYourTurn = self.view.viewWithTag(LabelIdentfier.YourTurn.rawValue) as? UILabel {
             labelYourTurn.removeFromSuperview()
@@ -434,16 +420,11 @@ class GameViewController: UIViewController {
 
             view.userInteractionEnabled = true
             if isMaster() && nbTour%2 == 0 {
-                if let labelWaitBis = self.view.viewWithTag(LabelIdentfier.Wait.rawValue) as? UILabel {
-                    
-                    //WTF ?! It doesn't work otherwise. Dunno why
-                    labelWaitBis.removeFromSuperview()
-                    self.view.viewWithTag(LabelIdentfier.Wait.rawValue)?.removeFromSuperview()
-                    
-                    
+                view.addGestureRecognizer(tap!)
+                if let labelWait = self.view.viewWithTag(LabelIdentfier.Wait.rawValue) {
+                    labelWait.removeFromSuperview()
                 }
-
-
+                
                 let firstLine = UILabel()
                 firstLine.text = "Your turn !"
                 firstLine.font = UIFont(name: "Roboto-Regular", size: 18)
@@ -451,42 +432,37 @@ class GameViewController: UIViewController {
                 firstLine.textColor = UIColor.hex("1D6C5D")
                 firstLine.tag = LabelIdentfier.YourTurn.rawValue
                 
+                
                 let secondLine = UILabel()
                 secondLine.text = "Drag and drop the event in his historical place"
-                secondLine.font = UIFont(name: "Roboto-Regular", size: 16)
+                secondLine.font = UIFont(name: "Roboto-Light", size: 16)
                 secondLine.textAlignment = .Center
                 secondLine.textColor = UIColor.hex("3C3F3F")
                 secondLine.tag = LabelIdentfier.Drag.rawValue
-
+                
                 
                 self.view.addSubview(firstLine)
                 self.view.addSubview(secondLine)
-
+                
                 let _ = [
-                    firstLine.m_bottom |=| bottomView.m_top - 10,
-                    firstLine.m_height |=| 10,
-                    firstLine.m_width |=| bottomView,
+                    secondLine.m_bottom |=| bottomView.m_top - 10,
+                    secondLine.m_height |=| 10,
+                    secondLine.m_width |=| bottomView,
                     
-                    secondLine.m_bottom |=| firstLine.m_top - 10,
+                    firstLine.m_bottom |=| secondLine.m_top,
                     firstLine.m_height |=| 10,
                     firstLine.m_width |=| bottomView,
-                ] ~~ .Activated
-
-
-
-                view.addGestureRecognizer(tap!)
+                    ] ~~ .Activated
+                
+                
                 
             } else if !isMaster() && nbTour%2 == 1 {
 
 
                 view.addGestureRecognizer(tap!)
-                if let labelWaitBis = self.view.viewWithTag(LabelIdentfier.Wait.rawValue) as? UILabel {
-
-                    //WTF ?! It doesn't work otherwise. Dunno why
-                    labelWaitBis.removeFromSuperview()
-                    self.view.viewWithTag(LabelIdentfier.Wait.rawValue)?.removeFromSuperview()
-
-
+                
+                if let labelWait = self.view.viewWithTag(LabelIdentfier.Wait.rawValue) {
+                    labelWait.removeFromSuperview()
                 }
                 
                 let firstLine = UILabel()
@@ -519,6 +495,24 @@ class GameViewController: UIViewController {
                     ] ~~ .Activated
 
                 
+            }
+            else {
+                let labelWait = UILabel()
+                labelWait.text = "Wait for Your Turn !"
+                labelWait.tag = LabelIdentfier.Wait.rawValue
+                labelWait.textAlignment = .Center
+                labelWait.font = UIFont(name: "Roboto-Regular", size: 16)
+                labelWait.textColor = UIColor.hex("DA3227")
+                self.view.addSubview(labelWait)
+                
+                let _ = [
+                    labelWait.m_bottom |=| bottomView.m_top - 10,
+                    labelWait.m_height |=| 10,
+                    labelWait.m_width |=| bottomView
+                    
+                    ] ~~ .Activated
+                
+
             }
 
         }
@@ -645,7 +639,7 @@ class GameViewController: UIViewController {
                 
             } else {
                 UIView.animateWithDuration(0.5, animations: { () -> Void in
-                    self.tap!.view!.frame.origin = self.origin
+                    self.tap!.view!.center = self.bottomView.center
 
                 })
             }
