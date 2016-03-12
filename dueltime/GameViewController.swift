@@ -6,6 +6,8 @@
 //  Copyright © 2016 Florent Taine. All rights reserved.
 //
 
+/// Problem if master. Dispatch ?
+
 import UIKit
 import Firebase
 import RealmSwift
@@ -35,6 +37,7 @@ class GameViewController: UIViewController {
     var lastArea = CGRect()
     let bottomView = UIView()
     var constraints : [MortarConstraint] = []
+    var life = 3
 
     var gameViewCenter : CGPoint {
         get {
@@ -665,6 +668,7 @@ class GameViewController: UIViewController {
                   
                 }
                 else {
+                    life--
                     self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":2])
 
                     let labelWrong = UILabel()
@@ -686,16 +690,22 @@ class GameViewController: UIViewController {
                     })
                     
                     delay(1) {
-                        labelWrong.removeFromSuperview()
-                        self.lastIndex = self.checkCorrectIndex()
-                        if self.lastIndex < 2 {
-                            self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
-                            
-                        } else {
-                            self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":1])
-                            
-                        }
+                        if self.life > 0 {
+                            labelWrong.removeFromSuperview()
+                            self.lastIndex = self.checkCorrectIndex()
+                            if self.lastIndex < 2 {
+                                self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
+                                
+                            } else {
+                                self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":1])
+                                
+                            }
 
+                        }
+                        else {
+                            self.ref.childByAppendingPath("ended").updateChildValues(["end":"true"])
+                        }
+                        
                     }
 
                 }
