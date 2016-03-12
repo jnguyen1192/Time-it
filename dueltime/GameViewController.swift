@@ -614,27 +614,73 @@ class GameViewController: UIViewController {
                 self.tap!.view!.userInteractionEnabled = false
                 
                 if isCorrect() {
-                    ref.childByAppendingPath("isCorrect").updateChildValues(["correct":1])
-                    if lastIndex < 2 {
-                        ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
+                    self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":1])
 
-                    } else {
-                        ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":1])
+                    let labelGood = UILabel()
+                    labelGood.text = "Good !"
+                    labelGood.textAlignment = .Center
+                    labelGood.textColor = UIColor.hex("3ABED9")
+                
+                    self.view.addSubview(labelGood)
+                    let viewDragged = self.view.viewWithTag(Int("999\(tabQuestion.last!.id)")!)! as UIView
+                    let _ = [
+                        labelGood.m_left |=| viewDragged,
+                        labelGood.m_bottom |=| viewDragged.frame.origin.y - viewDragged.frame.height / 2,
+
+                        labelGood.m_width |=| self.tap!.view!,
+                        labelGood.m_height |=| 10
+                    ] ~~ .Activated
+                    UIView.animateWithDuration(1, animations: {
+                        labelGood.frame.origin.y -= 50
+                    })
+                    delay(1) {
+                        labelGood.removeFromSuperview()
+                        if self.lastIndex < 2 {
+                            self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
+                            
+                        } else {
+                            self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":1])
+                            
+                        }
 
                     }
-
+                    
+                  
                 }
                 else {
+                    self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":2])
 
-                    ref.childByAppendingPath("isCorrect").updateChildValues(["correct":2])
-                    lastIndex = checkCorrectIndex()
-                    if lastIndex < 2 {
-                        ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
+                    let labelWrong = UILabel()
+                    labelWrong.text = "Wrong !"
+                    labelWrong.textAlignment = .Center
+                    labelWrong.textColor = UIColor.hex("DA3227")
+                    
+                    self.view.addSubview(labelWrong)
+                    let viewDragged = self.view.viewWithTag(Int("999\(tabQuestion.last!.id)")!)! as UIView
+                    let _ = [
+                        labelWrong.m_left |=| viewDragged,
+                        labelWrong.m_bottom |=| viewDragged.frame.origin.y - viewDragged.frame.height / 2,
                         
-                    } else {
-                        ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":1])
-                        
+                        labelWrong.m_width |=| self.tap!.view!,
+                        labelWrong.m_height |=| 10
+                        ] ~~ .Activated
+                    UIView.animateWithDuration(1, animations: {
+                        labelWrong.frame.origin.y -= 50
+                    })
+                    
+                    delay(1) {
+                        labelWrong.removeFromSuperview()
+                        self.lastIndex = self.checkCorrectIndex()
+                        if self.lastIndex < 2 {
+                            self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
+                            
+                        } else {
+                            self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":1])
+                            
+                        }
+
                     }
+
                 }
                 
             } else {
