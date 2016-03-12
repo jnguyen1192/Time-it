@@ -7,6 +7,7 @@
 //
 
 /// Problem if master. Dispatch ?
+/// Mettre le fond d'accueil
 
 import UIKit
 import Firebase
