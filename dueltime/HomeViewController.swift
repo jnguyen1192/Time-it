@@ -12,6 +12,7 @@ import RealmSwift
 import SwiftyJSON
 import Hue
 import Mortar
+import GCDKit
 
 
 class HomeViewController: UIViewController {
@@ -21,6 +22,15 @@ class HomeViewController: UIViewController {
     var readyLabel = UILabel()
 
     func findPlayer(sender: UIButton!) {
+        //Supprime le bouton pour chercher des joueurs
+        findPlayerOutlet.removeFromSuperview()
+        
+        
+        //Affiche icone de chargement
+        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+        activityIndicator.center = view.center
+        activityIndicator.startAnimating()
+        view.addSubview(activityIndicator)
         let roomEmpty = Firebase(url: "https://duel-time.firebaseio.com/Room/Empty")
         roomEmpty.observeSingleEventOfType(.Value, withBlock: {snap in
             //Pas de room vide
@@ -60,15 +70,7 @@ class HomeViewController: UIViewController {
     }
     
     func waitForPlayer(id : String) {
-        //Affiche icone de chargement
-        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
-        activityIndicator.center = view.center
-        activityIndicator.startAnimating()
-        view.addSubview(activityIndicator)
-        
-        //Supprime le bouton pour chercher des joueurs
-        findPlayerOutlet.removeFromSuperview()
-        
+    
         //Observe si la salle vide est supprimé
         let ref = Firebase(url: "https://duel-time.firebaseio.com/Room/Empty").childByAppendingPath(id)
         ref.observeSingleEventOfType(.ChildRemoved, withBlock: {snap in
@@ -145,59 +147,55 @@ class HomeViewController: UIViewController {
         self.view.addSubview(readyLabel)
         
         self.view.addBackground("fondAccueuil")
-        
-        var i = 0
-        if let path = NSBundle.mainBundle().pathForResource("data", ofType: "json") {
-            if let jsonData = NSData(contentsOfFile: path) {
-                let json = JSON(data: jsonData)
-                let realm = try! Realm()
-                try! realm.write{
-                    realm.deleteAll()
-                }
-                var orderedJson = [Item]()
-                
-                
-                for (index,subJson):(String, JSON) in json {
-                    
-                    for (key, subJsonBis):(String, JSON) in subJson {
-                        let item = Item()
-                        item.id = i++
-                        item.answer = index
-                        item.question = subJsonBis[key].string
-                        orderedJson.append(item)
-                        // realm.add(item)
-                        
-                    }
-                }
+        GCDQueue.Default.async{
             
-                orderedJson.sortInPlace({ (A, B) -> Bool in
-                    if A.answer == B.answer {
-                        return A.id < B.id
-                    }else {
-                        return Int(A.answer!)! < Int(B.answer!)!
-
-                    }
-                })
-                i=0
-                for item in orderedJson {
-                    item.id = i++
+            var i = 0
+            if let path = NSBundle.mainBundle().pathForResource("data", ofType: "json") {
+                if let jsonData = NSData(contentsOfFile: path) {
+                    let json = JSON(data: jsonData)
+                    let realm = try! Realm()
                     try! realm.write{
-                        realm.add(item)
+                        realm.deleteAll()
                     }
+                    var orderedJson = [Item]()
+                    
+                    
+                    for (index,subJson):(String, JSON) in json {
+                        
+                        for (key, subJsonBis):(String, JSON) in subJson {
+                            let item = Item()
+                            item.id = i++
+                            item.answer = index
+                            item.question = subJsonBis[key].string
+                            orderedJson.append(item)
+                            // realm.add(item)
+                            
+                        }
+                    }
+                    
+                    orderedJson.sortInPlace({ (A, B) -> Bool in
+                        if A.answer == B.answer {
+                            return A.id < B.id
+                        }else {
+                            return Int(A.answer!)! < Int(B.answer!)!
+                            
+                        }
+                    })
+                    i=0
+                    for item in orderedJson {
+                        item.id = i++
+                        try! realm.write{
+                            realm.add(item)
+                        }
+                    }
+                    print(realm.objects(Item).count)
+                    
+                    
                 }
-                print(realm.objects(Item).count)
                 
-
             }
 
         }
-        /*
-        let item1 = Item()
-        item1.id = 1
-        item1.question = "Toilette"
-        item1.answer = "1239"
-        */
-
 
         // Do any additional setup after loading the view, typically from a nib.
     }
