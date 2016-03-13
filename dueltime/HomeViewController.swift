@@ -12,8 +12,6 @@ import RealmSwift
 import SwiftyJSON
 import Hue
 import Mortar
-import GCDKit
-
 
 class HomeViewController: UIViewController {
     

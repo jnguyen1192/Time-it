@@ -14,6 +14,7 @@ import Firebase
 import RealmSwift
 import Hue
 import Mortar
+import GCDKit
 
 enum LabelIdentfier : Int {
     case YourTurn = 88801
@@ -394,10 +395,7 @@ class GameViewController: UIViewController {
                 label.tag = id
                 label.font = UIFont(name: "Roboto-Regular", size: 15)
                 view.tag = Int("999\(id)")!
-                if nbTour>2{
-                    print("addQuestion \(view.tag)")
-
-                }
+         
             }
         }
 
