@@ -92,6 +92,17 @@ class HomeViewController: UIViewController {
 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
+        findPlayerOutlet  = UIButton(type: UIButtonType.RoundedRect) as UIButton
+        findPlayerOutlet.frame = CGRectMake(0, 0, 0, 0)
+        findPlayerOutlet.addTarget(self, action: "findPlayer:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        readyLabel.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
+        
+        self.view.addSubview(self.findPlayerOutlet)
+        self.view.addSubview(self.readyLabel)
+
+        
         findPlayerOutlet.backgroundColor = UIColor.hex("1D6C5D")
         findPlayerOutlet.setTitleColor(UIColor.hex("F0F5F7"), forState: .Normal)
         findPlayerOutlet.setTitle("Time it !", forState: .Normal)
@@ -136,18 +147,8 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
-        findPlayerOutlet  = UIButton(type: UIButtonType.RoundedRect) as UIButton
-        findPlayerOutlet.frame = CGRectMake(0, 0, 0, 0)
-        findPlayerOutlet.addTarget(self, action: "findPlayer:", forControlEvents: UIControlEvents.TouchUpInside)
-        
-        readyLabel.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
-        
-        self.view.addSubview(findPlayerOutlet)
-        self.view.addSubview(readyLabel)
-        
         self.view.addBackground("fondAccueuil")
-        GCDQueue.Default.async{
+
             
             var i = 0
             if let path = NSBundle.mainBundle().pathForResource("data", ofType: "json") {
@@ -195,7 +196,9 @@ class HomeViewController: UIViewController {
                 
             }
 
-        }
+
+        
+
 
         // Do any additional setup after loading the view, typically from a nib.
     }
