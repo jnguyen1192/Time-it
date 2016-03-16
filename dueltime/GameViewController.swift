@@ -7,7 +7,9 @@
 //
 
 /// Mettre le fond d'accueil
-/// Mettre le timer
+/// Mettre barre timer
+/// Bug si timer prend fin quand on touche l'item
+
 import UIKit
 import Firebase
 import RealmSwift
@@ -43,6 +45,7 @@ class GameViewController: UIViewController {
     var timerPerSecond = NSTimer()
     var timeLeft = 8
     var timerLeftLabel = UILabel()
+    var timerView = UIView()
 
 
     var gameViewCenter : CGPoint {
@@ -175,14 +178,21 @@ class GameViewController: UIViewController {
        
 
         //Init game
+        self.view.addSubview(timerView)
         timerLeftLabel.text = String(timeLeft)
         timerLeftLabel.textAlignment = .Center
+        timerView.backgroundColor = UIColor.redColor()
+
         self.view.addSubview(timerLeftLabel)
         let _ = [
             timerLeftLabel.m_width |=| UIScreen.mainScreen().bounds.width,
             timerLeftLabel.m_height |=| 10,
             timerLeftLabel.m_centerX |=| self.view,
-            timerLeftLabel.m_top |=| self.view.m_top + 20
+            timerLeftLabel.m_top |=| self.view.m_top + 20,
+            
+            timerView.m_left |=| self.view,
+            timerView.m_top |=| self.view.m_top + 50,
+            timerView.m_height |=| 10
         ] ~~ .Activated
         
         if isMaster() {
@@ -195,10 +205,42 @@ class GameViewController: UIViewController {
     func startTimer() {
         timerPerSecond = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "timerPerSecondFires", userInfo: nil, repeats: true)
         timerToPlay = NSTimer.scheduledTimerWithTimeInterval(8, target: self, selector: "timerToPlayFires", userInfo: nil, repeats: false)
+        timerView.frame.size.width = UIScreen.mainScreen().bounds.width
+        
+        UIView.animateWithDuration(8, animations: {
+            self.timerView.frame.size.width = 0
+        })
     }
     
     func timerToPlayFires() {
         resetTimer()
+        timerView.layer.removeAllAnimations()
+
+        
+        let questionPlayingIndex = self.tabQuestion.last?.id
+        let questionPlaying = self.view.viewWithTag(questionPlayingIndex!)! as UIView
+        questionPlaying.userInteractionEnabled = false
+        
+        self.life--
+        self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":2])
+        print("correct done")
+        self.lastIndex = self.checkCorrectIndex()
+        print("lastIndex got")
+        if self.life > 0 {
+            print("life > 0")
+            if self.lastIndex < 2 {
+                self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
+                
+            } else {
+                self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":1])
+                
+            }
+            print("end life > 0")
+        } else {
+            self.ref.childByAppendingPath("ended").updateChildValues(["end":"true"])
+            
+        }
+
     }
     
     func resetTimer() {
@@ -698,10 +740,12 @@ class GameViewController: UIViewController {
                   
                 }
                 else {
+                    self.lastIndex = self.checkCorrectIndex()
+
                     GCDQueue.Default.async {
                         self.life--
                         self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":2])
-                        self.lastIndex = self.checkCorrectIndex()
+
                         if self.life > 0 {
                             if self.lastIndex < 2 {
                                 self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
@@ -756,23 +800,24 @@ class GameViewController: UIViewController {
     
     func checkCorrectIndex() -> Int {
         var i = 0
+        print("start")
 
-        GCDQueue.Main.sync {
-            if !self.isCorrect() {
+
+            print("main")
                 
                 let sortedTabQuestion = self.tabQuestion.sort({ (A, B) -> Bool in
                     return Int(A.answer!)! < Int(B.answer!)!
                 })
                 for question in sortedTabQuestion {
                     if question == self.currentQuestion {
-                        break
+                        return i
                     }
                     i++
                 }
-            }
+            
 
-        }
-        return i
+        
+        return -1
 
     }
     
