@@ -203,6 +203,7 @@ class GameViewController: UIViewController {
     }
     
     func startTimer() {
+        tap?.enabled = true
         timerPerSecond = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "timerPerSecondFires", userInfo: nil, repeats: true)
         timerToPlay = NSTimer.scheduledTimerWithTimeInterval(8, target: self, selector: "timerToPlayFires", userInfo: nil, repeats: false)
         timerView.frame.size.width = UIScreen.mainScreen().bounds.width
@@ -219,6 +220,9 @@ class GameViewController: UIViewController {
         
         let questionPlayingIndex = self.tabQuestion.last?.id
         let questionPlaying = self.view.viewWithTag(questionPlayingIndex!)! as UIView
+        tap?.enabled = false
+        questionPlaying.frame.origin = CGPoint(x: 0,y: 0)
+
         questionPlaying.userInteractionEnabled = false
         
         self.life--
