@@ -42,6 +42,8 @@ class GameViewController: UIViewController {
     var timerToPlay = NSTimer()
     var timerPerSecond = NSTimer()
     var timeLeft = 10
+    var timerLeftLabel = UILabel()
+
 
     var gameViewCenter : CGPoint {
         get {
@@ -173,7 +175,6 @@ class GameViewController: UIViewController {
        
 
         //Init game
-        var timerLeftLabel = UILabel()
         timerLeftLabel.text = String(timeLeft)
         timerLeftLabel.textAlignment = .Center
         self.view.addSubview(timerLeftLabel)
@@ -191,6 +192,13 @@ class GameViewController: UIViewController {
        
     }
     
+    func startTimer() {
+        timerPerSecond = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "timerPerSecondFires", userInfo: nil, repeats: true)
+    }
+    
+    func timerPerSecondFires() {
+        timerLeftLabel.text = String(--timeLeft)
+    }
     
    
     func placeQuestion() {
@@ -465,7 +473,7 @@ class GameViewController: UIViewController {
                     firstLine.m_width |=| bottomView,
                     ] ~~ .Activated
                 
-                
+                startTimer()
                 
             } else if !isMaster() && nbTour%2 == 1 {
 
@@ -505,7 +513,7 @@ class GameViewController: UIViewController {
                     firstLine.m_width |=| bottomView,
                     ] ~~ .Activated
 
-                
+                startTimer()
             }
             else {
                 let labelWait = UILabel()
