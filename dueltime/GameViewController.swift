@@ -39,6 +39,9 @@ class GameViewController: UIViewController {
     let bottomView = UIView()
     var constraints : [MortarConstraint] = []
     var life = 3
+    var timerToPlay = NSTimer()
+    var timerPerSecond = NSTimer()
+    var timeLeft = 10
 
     var gameViewCenter : CGPoint {
         get {
@@ -170,6 +173,17 @@ class GameViewController: UIViewController {
        
 
         //Init game
+        var timerLeftLabel = UILabel()
+        timerLeftLabel.text = String(timeLeft)
+        timerLeftLabel.textAlignment = .Center
+        self.view.addSubview(timerLeftLabel)
+        let _ = [
+            timerLeftLabel.m_width |=| UIScreen.mainScreen().bounds.width,
+            timerLeftLabel.m_height |=| 10,
+            timerLeftLabel.m_centerX |=| self.view,
+            timerLeftLabel.m_top |=| self.view.m_top + 20
+        ] ~~ .Activated
+        
         if isMaster() {
             self.pickCarte()
         }
