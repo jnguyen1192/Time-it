@@ -105,10 +105,12 @@ class GameViewController: UIViewController {
         })
         
         ref.childByAppendingPath("lastIndex").observeEventType(.ChildChanged, withBlock: {snap in
+            
             self.lastIndex = snap.value as! Int
             if self.lastIndex >= 0 {
-                self.tabQuestion.insert(self.tabQuestion.last!, atIndex: self.lastIndex)
-                self.tabQuestion.removeLast()
+                self.tabQuestion.sortInPlace({ (A, B) -> Bool in
+                    return Int(A.answer!)! < Int(B.answer!)!
+                })
                 if self.nbTour > 2 {
                     
                     if  self.lastIndex == 2  {
@@ -124,10 +126,11 @@ class GameViewController: UIViewController {
                     }
                     
                 }
+                self.nbTour++
 
                 
                 if self.isMaster() {
-                    self.updateTour()
+                    self.pickCarte()
                 }
             }
            
@@ -141,16 +144,7 @@ class GameViewController: UIViewController {
         })
 
         
-        ref.childByAppendingPath("Tour").observeEventType(.ChildChanged, withBlock: {snap in
-            self.tabQuestion.sortInPlace({ (A, B) -> Bool in
-                return Int(A.answer!)! < Int(B.answer!)!
-            })
-            self.nbTour = snap.value as! Int
-            if self.isMaster() {
-                self.pickCarte()
-            }
-        })
-        
+
         ref.childByAppendingPath("Question").observeEventType(.ChildAdded, withBlock: {snap in
             
             let question = self.realm.objects(Item).filter("id = \(snap.value)").first
@@ -337,13 +331,6 @@ class GameViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
 
-    }
-    
-
-    func updateTour() {
-        nbTour++
-
-        self.ref.childByAppendingPath("Tour").updateChildValues(["nbTour" : nbTour])
     }
     
     
