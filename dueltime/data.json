@@ -1,141 +1,625 @@
 {
-  "1897": [
-    {
-      "0": "French 75"
-    }
-  ],
-  "1898": [
-    {
-      "0": "Philippine Declaration of Independence"
-    },
-    {
-      "1": "Emile Zola's open letter \"j'accuse\""
-    }
-  ],
-  "1899": [
-    {
-      "0": "Alfred Dreyfus is pardoned"
-    },
-    {
-      "1": "First Hague Convention"
-    }
-  ],
-  "1900": [
-    {
-      "0": "First zeppelin flight"
-    },
-    {
-      "1": "Queen Elizabeth birth"
-    },
-    {
-      "2": "First Michelin Guide published"
-    }
-  ],
-  "1901": [
-    {
-      "0": "Funeral of Queen Victoria"
-    },
-    {
-      "1": "Benjamin Harrison death"
-    },
-    {
-      "2": "longest covered bridge opening"
-    },
-    {
-      "3": "World's first trolleybus system opening"
-    },
-    {
-      "4": "\"Speak softly and carry a big stick\""
-    },
-    {
-      "5": "Theodore Roosevelt president for the first time"
-    },
-    {
-      "6": "First Nobel Prize ceremony"
-    }
-  ],
-  "1902": [
-    {
-      "0": "Berlin U-Bahn opening"
-    },
-    {
-      "1": "Real Madrid founded"
-    },
-    {
-      "2": "Electric Theatre opening"
-    },
-    {
-      "3": "Independence of Cuba"
-    },
-    {
-      "4": "Edward VII crowning"
-    },
-    {
-      "5": "The first teddy bear is produced"
-    }
-  ],
-  "1903": [
-    {
-      "0": "Alexander I assassinated in Belgrade"
-    },
-    {
-      "1": "First Tour de France bicycle race"
-    },
-    {
-      "2": "Independence of Panama"
-    },
-    {
-      "3": "The first box of Crayola crayons"
-    }
-  ],
-  "1904": [
-    {
-      "0": "distress signal CQD established"
-    },
-    {
-      "1": "The Great Baltimore Fire"
-    },
-    {
-      "2": "Puccini's opera \"Madama Butterfly\""
-    },
-    {
-      "3": "The Pi Kappa Phi fraternity is founded"
-    }
-  ],
-  "1905": [
-    {
-      "0": "The Trans-Siberian Railway officially opens"
-    },
-    {
-      "1": "Chelsea F.C. is founded"
-    },
-    {
-      "2": "Einstein's \"miracle year\""
-    },
-    {
-      "3": "Fauvist artists first exhibit"
-    },
-    {
-      "4": "French law on the Separation of the Churches and the State"
-    }
-  ],
-  "1906": [
-    {
-      "0": "Second Geneva Convention"
-    },
-    {
-      "1": "End of the Dreyfus affair"
-    },
-    {
-      "2": "Mahatma Gandhi coins the term Satyagraha"
-    },
-    {
-      "3": "distress signal SOS established"
-    }
-  ],
-  "1907": [
-    {
-      "0": "\"Triple Entente\" is formed"
-    }
-  ]
+    "1897": [
+             {
+             "0": "French 75"
+             }
+             ],
+    "1898": [
+             {
+             "0": "Philippine Declaration of Independence"
+             },
+             {
+             "1": "Emile Zola's open letter \"j'accuse\""
+             }
+             ],
+    "1899": [
+             {
+             "0": "Alfred Dreyfus is pardoned"
+             },
+             {
+             "1": "First Hague Convention"
+             }
+             ],
+    "1900": [
+             {
+             "0": "First zeppelin flight"
+             },
+             {
+             "1": "Queen Elizabeth birth"
+             },
+             {
+             "2": "First Michelin Guide published"
+             }
+             ],
+    "1901": [
+             {
+             "0": "Funeral of Queen Victoria"
+             },
+             {
+             "1": "Benjamin Harrison death"
+             },
+             {
+             "2": "longest covered bridge opening"
+             },
+             {
+             "3": "World's first trolleybus system opening"
+             },
+             {
+             "4": "\"Speak softly and carry a big stick\""
+             },
+             {
+             "5": "Theodore Roosevelt president for the first time"
+             },
+             {
+             "6": "First Nobel Prize ceremony"
+             }
+             ],
+    "1902": [
+             {
+             "0": "Berlin U-Bahn opening"
+             },
+             {
+             "1": "Real Madrid founded"
+             },
+             {
+             "2": "Electric Theatre opening"
+             },
+             {
+             "3": "Independence of Cuba"
+             },
+             {
+             "4": "The first teddy bear is produced"
+             }
+             ],
+    "1903": [
+             {
+             "0": "Alexander I assassinated in Belgrade"
+             },
+             {
+             "1": "First Tour de France bicycle race"
+             },
+             {
+             "2": "Independence of Panama"
+             },
+             {
+             "3": "The first box of Crayola crayons"
+             }
+             ],
+    "1904": [
+             {
+             "0": "distress signal CQD established"
+             },
+             {
+             "1": "The Great Baltimore Fire"
+             },
+             {
+             "2": "Puccini's opera \"Madama Butterfly\""
+             },
+             {
+             "3": "The Pi Kappa Phi fraternity is founded"
+             }
+             ],
+    "1905": [
+             {
+             "0": "The Trans-Siberian Railway officially opens"
+             },
+             {
+             "1": "Chelsea F.C. is founded"
+             },
+             {
+             "2": "Einstein's \"miracle year\""
+             },
+             {
+             "3": "Fauvist artists first exhibit"
+             },
+             {
+             "4": "French law on the Separation of the Churches and the State"
+             }
+             ],
+    "1906": [
+             {
+             "0": "Second Geneva Convention"
+             },
+             {
+             "1": "End of the Dreyfus affair"
+             },
+             {
+             "2": "Mahatma Gandhi coins the term Satyagraha"
+             },
+             {
+             "3": "distress signal SOS established"
+             }
+             ],
+    "1907": [
+             {
+             "0": "\"Triple Entente\" is formed"
+             }
+             ],
+    "1908": [
+             {
+             "0": "First long-distance radio message sent from the Eiffel Tower"
+             },
+             {
+             "1": "First passenger flight"
+             }
+             ],
+    "1909": [
+             {
+             "0": "First radio broadcaster"
+             }
+             ],
+    "1910": [
+             {
+             "1": "First woman authorized to fly an airplane"
+             },
+             {
+             "2": "First horror movie"
+             }
+             ],
+    "1911": [
+             {
+             "0": "First aircraft landing on a ship"
+             },
+             {
+             "1": "International Women's Day"
+             },
+             {
+             "2": "First combat aerial bombing mission"
+             }
+             ],
+    "1912": [
+             {
+             "0": "First parachute jump from a flying airplane"
+             },
+             {
+             "1": "Casimir Funk identifies vitamins"
+             }
+             ],
+    "1913": [
+             {
+             "0": "«The Little Mermaid » Statue"
+             }
+             ],
+    "1914": [
+             {
+             "0": "Eight-hour workday in Ford Motor Company"
+             },
+             {
+             "1": "Charlie Chaplin’s first movie"
+             },
+             {
+             "2": "WW1 starts"
+             }
+             ],
+    "1915": [
+             {
+             "0": "First use of chemical weapons"
+             },
+             {
+             "1": "NACA is founded"
+             }
+             ],
+    "1916": [
+             {
+             "0": "BMW is founded",
+             "1": "First use of tanks"
+             }
+             ],
+    "1917": [
+             {
+             "0": "J. R. R. Tolkien begins writing The Book of Lost Tales"
+             },
+             {
+             "1": "first pilotless drone flight"
+             }
+             ],
+    "1918": [
+             {
+             "0": "Fourteen Points speech"
+             },
+             {
+             "1": "WW1 ends"
+             },
+             {
+             "2": "Use of « Paris Gun »"
+             }
+             ],
+    "1919": [
+             {
+             "0": "Funeral of Theodore Roosevelt"
+             },
+             {
+             "1": "First U.S tax on gasoline"
+             },
+             {
+             "2": "Treaty of Versailles"
+             }
+             ],
+    "1920": [
+             {
+             "0": "Nazi party created"
+             }
+             ],
+    "1921": [
+             {
+             "0": "The first vaccination against tuberculosis"
+             }
+             ],
+    "1922": [
+             {
+             "0": "The first insulin treatment of diabetes"
+             },
+             {
+             "1": "The first radio in the White House"
+             }
+             ],
+    "1923": [
+             {
+             "0": "The autogyro is invented"
+             },
+             {
+             "1": "First recording of Louis Armstrong"
+             }
+             ],
+    "1924": [
+             {
+             "0": "Lenin death"
+             },
+             {
+             "1": "CTR renames to IBM"
+             }
+             ],
+    "1925": [
+             {
+             "0": "Kristiania renames to Oslo"
+             },
+             {
+             "1": "Mein Kampf volume 1"
+             }
+             ],
+    "1926": [
+             {
+             "0": "Committee on Evil Literature"
+             },
+             {
+             "1": "first launch of liquid-fuel rocket"
+             }
+             ],
+    "1927": [
+             {
+             "0": "First transatlantic phone call"
+             },
+             {
+             "1": "First solo, nonstop transatlantic airplane flight"
+             }
+             ],
+    "1928": [
+             {
+             "0": "Mickey is created"
+             }
+             ],
+    "1929": [
+             {
+             "1": "Popeye is created"
+             }
+             ],
+    "1930": [
+             {
+             "0": "First diesel engine car is created"
+             },
+             {
+             "1": "The Mickey Mouse comic is created"
+             }
+             ],
+    "1931": [
+             {
+             "0": "Gandhi–Irwin Pact"
+             },
+             {
+             "1": "Empire State Building"
+             },
+             {
+             "2": "Chinese Soviet Republic is proclaimed"
+             },
+             {
+             "3": "deuterium, is discovered"
+             }
+             ],
+    "1932": [
+             {
+             "0": "First woman in the United States Senate"
+             }
+             ],
+    "1933": [
+             {
+             "0": "Hitler becomes Chancellor"
+             },
+             {
+             "1": "King Kong is released"
+             }
+             ],
+    "1934": [
+             {
+             "0": "Night of the Long Knives"
+             }
+             ],
+    "1935": [
+             {
+             "0": "First canned beer"
+             },
+             {
+             "1": "Treaty of Versailles violation"
+             }
+             ],
+    "1936": [
+             {
+             "0": "The Phantom (comic) is created"
+             }
+             ],
+    "1938": [
+             {
+             "0": "LSD"
+             }
+             ],
+    "1940": [
+             {
+             "0": "Pinocchio"
+             }
+             ],
+    "1941": [
+             {
+             "0": "Pearl Harbor"
+             }
+             ],
+    "1943": [
+             {
+             "0": "The Little Prince"
+             }
+             ],
+    "1947": [
+             {
+             "0": "Al Capone’s death"
+             }
+             ],
+    "1948": [
+             {
+             "0": "Assassination of Gandhi"
+             }
+             ],
+    "1955": [
+             {
+             "0": "Guinness Book of Records"
+             }
+             ],
+    "1956": [
+             {
+             "0": "Snooze alarm"
+             }
+             ],
+    "1957": [
+             {
+             "0": "Frisbee"
+             }
+             ],
+    "1962": [
+             {
+             "0": "Taco Bell"
+             }
+             ],
+    "1966": [
+             {
+             "0": "Walt Disney’s death"
+             }
+             ],
+    "1968": [
+             {
+             "0": "Apollo 7"
+             }
+             ],
+    "1970": [
+             {
+             "0": "Jimi Hendrix’s death"
+             }
+             ],
+    "1971": [
+             {
+             "0": "Greenpeace"
+             }
+             ],
+    "1973": [
+             {
+             "0": "World Trade Center"
+             }
+             ],
+    "1974": [
+             {
+             "0": "Stephen King’s first novel"
+             },
+             {
+             "1": "Rubik's Cube puzzle"
+             }
+             ],
+    "1975": [
+             {
+             "0": "International Women's Day"
+             }
+             ],
+    "1976": [
+             {
+             "0": "Apple is formed"
+             }
+             ],
+    "1978": [
+             {
+             "0": "Garfield"
+             }
+             ],
+    "1979": [
+             {
+             "0": "McDonald's introduces the Happy Meal"
+             }
+             ],
+    "1981": [
+             {
+             "0": "Bob Marley’s death"
+             }
+             ],
+    "1984": [
+             {
+             "0": "Macintosh personal computer"
+             },
+             {
+             "1": "Astronauts Bruce McCandless II and Robert L. Stewart make the first untethered space walk"
+             },
+             {
+             "2": "Marvin Gaye’s death"
+             }
+             ],
+    "1985": [
+             {
+             "0": "DNS"
+             }
+             ],
+    "1986": [
+             {
+             "0": "First PC virus"
+             },
+             {
+             "1": "Pixar Animation Studios"
+             },
+             {
+             "2": "The Legend of Zelda"
+             }
+             ],
+    "1987": [
+             {
+             "0": "The Simpsons cartoon"
+             }
+             ],
+    "1988": [
+             {
+             "0": "First transatlantic cable using optical fibers"
+             }
+             ],
+    "1990": [
+             {
+             "3": "Windows 3.0"
+             }
+             ],
+    "1991": [
+             {
+             "0": "Street Fighter II"
+             },
+             {
+             "1": "SNES"
+             }
+             ],
+    "1993": [
+             {
+             "0": "Super Mario Bros."
+             },
+             {
+             "1": "Doom"
+             }
+             ],
+    "1994": [
+             {
+             "0": "Kurt Cobain’s death"
+             }
+             ],
+    "1996": [
+             {
+             "0": "Pokemon Red and Blue"
+             },
+             {
+             "1": "The Nintendo 64"
+             }
+             ],
+    "1997": [
+             {
+             "0": "Final Fantasy VII"
+             }
+             ],
+    "1998": [
+             {
+             "0": "Windows 98"
+             }
+             ],
+    "1999": [
+             {
+             "0": "Euro is established."
+             },
+             {
+             "1": "Family Guy"
+             },
+             {
+             "2": "SpongeBob"
+             },
+             {
+             "3": "Star Wars: Episode I"
+             }
+             ],
+    "2000": [
+             {
+             "0": "Mac OS X"
+             }
+             ],
+    "2001": [
+             {
+             "0": "Windows XP"
+             }
+             ],
+    "2003": [
+             {
+             "0": "First horse cloned"
+             }
+             ],
+    "2004": [
+             {
+             "0": "Facebook"
+             },
+             {
+             "1": "s Gmail"
+             },
+             {
+             "2": "Ubuntu"
+             }
+             ],
+    "2005": [
+             {
+             "0": "YouTube"
+             },
+             {
+             "1": "First human face transplant"
+             }
+             ],
+    "2006": [
+             {
+             "0": "Twitter"
+             }
+             ],
+    "2007": [
+             {
+             "0": "iPhone"
+             },
+             {
+             "1": "Slavery is abolished everywhere"
+             }
+             ],
+    "2011": [
+             {},
+             {
+             "1": "Osama bin Laden’s death"
+             }
+             ],
+    "2012": [
+             {
+             "0": "Curiosity lands on Mars"
+             }
+             ],
+    "2014": [
+             {
+             "0": "Euthanasia legalized for the first time"
+             }
+             ]
 }

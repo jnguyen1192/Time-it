@@ -15,5 +15,9 @@ class Item: Object {
     dynamic var id : Int = 0
     dynamic var question : String?
     dynamic var answer : String?
+    
+    override static func primaryKey() -> String? {
+        return "id"
+    }
 }
 
