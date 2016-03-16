@@ -633,6 +633,18 @@ class GameViewController: UIViewController {
                 self.tap!.view!.userInteractionEnabled = false
                 
                 if isCorrect() {
+                    
+                    GCDQueue.Default.async {
+                        if self.lastIndex < 2 {
+                            self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
+                            
+                        } else {
+                            self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":1])
+                            
+                        }
+
+                    }
+                    
                     self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":1])
 
                     let labelGood = UILabel()
@@ -654,14 +666,7 @@ class GameViewController: UIViewController {
                     })
                     delay(1) {
                         labelGood.removeFromSuperview()
-                        if self.lastIndex < 2 {
-                            self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
-                            
-                        } else {
-                            self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":1])
-                            
-                        }
-
+                        
                     }
                     
                   
