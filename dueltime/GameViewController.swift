@@ -106,6 +106,7 @@ class GameViewController: UIViewController {
         
         ref.childByAppendingPath("lastIndex").observeEventType(.ChildChanged, withBlock: {snap in
             
+            
             self.lastIndex = snap.value as! Int
             if self.lastIndex >= 0 {
                 self.tabQuestion.sortInPlace({ (A, B) -> Bool in
@@ -146,6 +147,7 @@ class GameViewController: UIViewController {
         
 
         ref.childByAppendingPath("Question").observeEventType(.ChildAdded, withBlock: {snap in
+        
             
             let question = self.realm.objects(Item).filter("id = \(snap.value)").first
             self.tabQuestion.append(question!)
@@ -622,6 +624,8 @@ class GameViewController: UIViewController {
                 if isCorrect() {
                     
                     GCDQueue.Default.async {
+                        self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":1])
+
                         if self.lastIndex < 2 {
                             self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
                             
@@ -630,9 +634,9 @@ class GameViewController: UIViewController {
                             
                         }
 
+
                     }
                     
-                    self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":1])
 
                     let labelGood = UILabel()
                     labelGood.text = "Good !"
@@ -659,9 +663,26 @@ class GameViewController: UIViewController {
                   
                 }
                 else {
-                    life--
-                    self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":2])
+                    GCDQueue.Default.async {
+                        self.life--
+                        self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":2])
+                        self.lastIndex = self.checkCorrectIndex()
+                        if self.life > 0 {
+                            if self.lastIndex < 2 {
+                                self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
+                                
+                            } else {
+                                self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":1])
+                                
+                            }
 
+                        } else {
+                            self.ref.childByAppendingPath("ended").updateChildValues(["end":"true"])
+
+                        }
+                       
+                    }
+                    
                     let labelWrong = UILabel()
                     labelWrong.text = "Wrong !"
                     labelWrong.textAlignment = .Center
@@ -681,22 +702,7 @@ class GameViewController: UIViewController {
                     })
                     
                     delay(1) {
-                        if self.life > 0 {
-                            labelWrong.removeFromSuperview()
-                            self.lastIndex = self.checkCorrectIndex()
-                            if self.lastIndex < 2 {
-                                self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
-                                
-                            } else {
-                                self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":1])
-                                
-                            }
-
-                        }
-                        else {
-                            self.ref.childByAppendingPath("ended").updateChildValues(["end":"true"])
-                        }
-                        
+                        labelWrong.removeFromSuperview()
                     }
 
                 }
@@ -714,21 +720,25 @@ class GameViewController: UIViewController {
     }
     
     func checkCorrectIndex() -> Int {
-        
-        if !isCorrect() {
+        var i = 0
 
-            let sortedTabQuestion = tabQuestion.sort({ (A, B) -> Bool in
-                return Int(A.answer!)! < Int(B.answer!)!
-            })
-            var i = 0
-            for question in sortedTabQuestion {
-                if question == currentQuestion {
-                    return i
+        GCDQueue.Main.sync {
+            if !self.isCorrect() {
+                
+                let sortedTabQuestion = self.tabQuestion.sort({ (A, B) -> Bool in
+                    return Int(A.answer!)! < Int(B.answer!)!
+                })
+                for question in sortedTabQuestion {
+                    if question == self.currentQuestion {
+                        break
+                    }
+                    i++
                 }
-                i++
             }
+
         }
-        return -1
+        return i
+
     }
     
     
