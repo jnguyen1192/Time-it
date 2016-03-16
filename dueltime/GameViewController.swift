@@ -41,7 +41,7 @@ class GameViewController: UIViewController {
     var life = 3
     var timerToPlay = NSTimer()
     var timerPerSecond = NSTimer()
-    var timeLeft = 10
+    var timeLeft = 8
     var timerLeftLabel = UILabel()
 
 
@@ -194,6 +194,19 @@ class GameViewController: UIViewController {
     
     func startTimer() {
         timerPerSecond = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "timerPerSecondFires", userInfo: nil, repeats: true)
+        timerToPlay = NSTimer.scheduledTimerWithTimeInterval(8, target: self, selector: "timerToPlayFires", userInfo: nil, repeats: false)
+    }
+    
+    func timerToPlayFires() {
+        resetTimer()
+    }
+    
+    func resetTimer() {
+        timerToPlay.invalidate()
+        timerPerSecond.invalidate()
+        timeLeft = 8
+        timerLeftLabel.text = String(timeLeft)
+
     }
     
     func timerPerSecondFires() {
@@ -633,6 +646,7 @@ class GameViewController: UIViewController {
         }
         else if self.tap!.state == .Ended {
             if let area = goalReached() {
+                resetTimer()
                 let areaCenterX = area.origin.x + area.width/2
                 let areaCenterY = area.origin.y + area.height/2
 
