@@ -6,9 +6,8 @@
 //  Copyright © 2016 Florent Taine. All rights reserved.
 //
 
-/// Problem if master. Dispatch ?
 /// Mettre le fond d'accueil
-
+/// Mettre le timer
 import UIKit
 import Firebase
 import RealmSwift
