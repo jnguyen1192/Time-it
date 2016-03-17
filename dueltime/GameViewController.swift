@@ -7,7 +7,8 @@
 //
 
 /// Mettre le fond d'accueil
-/// Mettre le timer
+
+
 import UIKit
 import Firebase
 import RealmSwift
@@ -39,6 +40,12 @@ class GameViewController: UIViewController {
     let bottomView = UIView()
     var constraints : [MortarConstraint] = []
     var life = 3
+    var timerToPlay = NSTimer()
+    var timerPerSecond = NSTimer()
+    var timeLeft = 10
+    var timerLeftLabel = UILabel()
+    var timerView = UIView()
+
 
     var gameViewCenter : CGPoint {
         get {
@@ -170,6 +177,16 @@ class GameViewController: UIViewController {
        
 
         //Init game
+        timerLeftLabel.text = String(timeLeft)
+        timerLeftLabel.textAlignment = .Center
+               self.view.addSubview(timerLeftLabel)
+        let _ = [
+            timerLeftLabel.m_width |=| UIScreen.mainScreen().bounds.width,
+            timerLeftLabel.m_height |=| 10,
+            timerLeftLabel.m_centerX |=| self.view,
+            timerLeftLabel.m_top |=| self.view.m_top + 20,
+        ] ~~ .Activated
+        
         if isMaster() {
             self.pickCarte()
         }
@@ -177,6 +194,68 @@ class GameViewController: UIViewController {
        
     }
     
+    func startTimer() {
+        tap?.enabled = true
+        
+        timerView.backgroundColor = UIColor.redColor()
+        timerView.frame.size.width = UIScreen.mainScreen().bounds.width
+        self.view.addSubview(timerView)
+        
+        let _ = [
+            timerView.m_left |=| self.view,
+            timerView.m_top |=| self.view.m_top + 50,
+            timerView.m_height |=| 10
+        ] ~~ .Activated
+
+        UIView.animateWithDuration(Double(timeLeft), animations: {
+            self.timerView.frame.size.width = 0
+        })
+        timerPerSecond = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "timerPerSecondFires", userInfo: nil, repeats: true)
+        timerToPlay = NSTimer.scheduledTimerWithTimeInterval(Double(timeLeft), target: self, selector: "timerToPlayFires", userInfo: nil, repeats: false)
+        
+    }
+    
+    func timerToPlayFires() {
+        resetTimer()
+        
+        let questionPlayingIndex = self.tabQuestion.last?.id
+        let questionPlaying = self.view.viewWithTag(questionPlayingIndex!)! as UIView
+        tap?.enabled = false
+        questionPlaying.frame.origin = CGPoint(x: 0,y: 0)
+
+        questionPlaying.userInteractionEnabled = false
+        
+        self.life--
+        self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":2])
+        self.lastIndex = self.checkCorrectIndex()
+        if self.life > 0 {
+            if self.lastIndex < 2 {
+                self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
+                
+            } else {
+                self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":1])
+                
+            }
+        } else {
+            self.ref.childByAppendingPath("ended").updateChildValues(["end":"true"])
+            
+        }
+
+    }
+    
+    func resetTimer() {
+        timerView.removeFromSuperview()
+        timerToPlay.invalidate()
+        timerPerSecond.invalidate()
+        timeLeft = 10 - nbTour / 2
+        timerLeftLabel.text = String(timeLeft)
+
+    }
+    
+    func timerPerSecondFires() {
+       
+        timerLeftLabel.text = String(--timeLeft)
+    }
     
    
     func placeQuestion() {
@@ -334,6 +413,20 @@ class GameViewController: UIViewController {
 
     }
     
+    override func shouldAutorotate() -> Bool {
+        if (UIDevice.currentDevice().orientation == UIDeviceOrientation.LandscapeLeft ||
+            UIDevice.currentDevice().orientation == UIDeviceOrientation.LandscapeRight ||
+            UIDevice.currentDevice().orientation == UIDeviceOrientation.Unknown) {
+                return false
+        }
+        else {
+            return true
+        }
+    }
+    
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return [UIInterfaceOrientationMask.Portrait ,UIInterfaceOrientationMask.PortraitUpsideDown]
+    }
     
     func pickCarte() {
 
@@ -451,7 +544,7 @@ class GameViewController: UIViewController {
                     firstLine.m_width |=| bottomView,
                     ] ~~ .Activated
                 
-                
+                startTimer()
                 
             } else if !isMaster() && nbTour%2 == 1 {
 
@@ -491,7 +584,7 @@ class GameViewController: UIViewController {
                     firstLine.m_width |=| bottomView,
                     ] ~~ .Activated
 
-                
+                startTimer()
             }
             else {
                 let labelWait = UILabel()
@@ -611,6 +704,7 @@ class GameViewController: UIViewController {
         }
         else if self.tap!.state == .Ended {
             if let area = goalReached() {
+                resetTimer()
                 let areaCenterX = area.origin.x + area.width/2
                 let areaCenterY = area.origin.y + area.height/2
 
@@ -662,10 +756,12 @@ class GameViewController: UIViewController {
                   
                 }
                 else {
+                    self.lastIndex = self.checkCorrectIndex()
+
                     GCDQueue.Default.async {
                         self.life--
                         self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":2])
-                        self.lastIndex = self.checkCorrectIndex()
+
                         if self.life > 0 {
                             if self.lastIndex < 2 {
                                 self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
@@ -720,23 +816,20 @@ class GameViewController: UIViewController {
     
     func checkCorrectIndex() -> Int {
         var i = 0
-
-        GCDQueue.Main.sync {
-            if !self.isCorrect() {
                 
                 let sortedTabQuestion = self.tabQuestion.sort({ (A, B) -> Bool in
                     return Int(A.answer!)! < Int(B.answer!)!
                 })
                 for question in sortedTabQuestion {
                     if question == self.currentQuestion {
-                        break
+                        return i
                     }
                     i++
                 }
-            }
+            
 
-        }
-        return i
+        
+        return -1
 
     }
     
