@@ -7,8 +7,7 @@
 //
 
 /// Mettre le fond d'accueil
-/// Algo durée timer
-/// Réduire range
+
 
 import UIKit
 import Firebase
@@ -414,6 +413,20 @@ class GameViewController: UIViewController {
 
     }
     
+    override func shouldAutorotate() -> Bool {
+        if (UIDevice.currentDevice().orientation == UIDeviceOrientation.LandscapeLeft ||
+            UIDevice.currentDevice().orientation == UIDeviceOrientation.LandscapeRight ||
+            UIDevice.currentDevice().orientation == UIDeviceOrientation.Unknown) {
+                return false
+        }
+        else {
+            return true
+        }
+    }
+    
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return [UIInterfaceOrientationMask.Portrait ,UIInterfaceOrientationMask.PortraitUpsideDown]
+    }
     
     func pickCarte() {
 
