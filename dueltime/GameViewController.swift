@@ -8,7 +8,7 @@
 
 /// Mettre le fond d'accueil
 /// Mettre barre timer
-/// Bug si timer prend fin quand on touche l'item
+
 
 import UIKit
 import Firebase
@@ -178,21 +178,14 @@ class GameViewController: UIViewController {
        
 
         //Init game
-        self.view.addSubview(timerView)
         timerLeftLabel.text = String(timeLeft)
         timerLeftLabel.textAlignment = .Center
-        timerView.backgroundColor = UIColor.redColor()
-
-        self.view.addSubview(timerLeftLabel)
+               self.view.addSubview(timerLeftLabel)
         let _ = [
             timerLeftLabel.m_width |=| UIScreen.mainScreen().bounds.width,
             timerLeftLabel.m_height |=| 10,
             timerLeftLabel.m_centerX |=| self.view,
             timerLeftLabel.m_top |=| self.view.m_top + 20,
-            
-            timerView.m_left |=| self.view,
-            timerView.m_top |=| self.view.m_top + 50,
-            timerView.m_height |=| 10
         ] ~~ .Activated
         
         if isMaster() {
@@ -204,19 +197,27 @@ class GameViewController: UIViewController {
     
     func startTimer() {
         tap?.enabled = true
-        timerPerSecond = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "timerPerSecondFires", userInfo: nil, repeats: true)
-        timerToPlay = NSTimer.scheduledTimerWithTimeInterval(8, target: self, selector: "timerToPlayFires", userInfo: nil, repeats: false)
-        timerView.frame.size.width = UIScreen.mainScreen().bounds.width
         
+        timerView.backgroundColor = UIColor.redColor()
+        timerView.frame.size.width = UIScreen.mainScreen().bounds.width
+        self.view.addSubview(timerView)
+        
+        let _ = [
+            timerView.m_left |=| self.view,
+            timerView.m_top |=| self.view.m_top + 50,
+            timerView.m_height |=| 10
+        ] ~~ .Activated
+
         UIView.animateWithDuration(8, animations: {
             self.timerView.frame.size.width = 0
         })
+        timerPerSecond = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "timerPerSecondFires", userInfo: nil, repeats: true)
+        timerToPlay = NSTimer.scheduledTimerWithTimeInterval(8, target: self, selector: "timerToPlayFires", userInfo: nil, repeats: false)
+        
     }
     
     func timerToPlayFires() {
         resetTimer()
-        timerView.layer.removeAllAnimations()
-
         
         let questionPlayingIndex = self.tabQuestion.last?.id
         let questionPlaying = self.view.viewWithTag(questionPlayingIndex!)! as UIView
@@ -227,11 +228,8 @@ class GameViewController: UIViewController {
         
         self.life--
         self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":2])
-        print("correct done")
         self.lastIndex = self.checkCorrectIndex()
-        print("lastIndex got")
         if self.life > 0 {
-            print("life > 0")
             if self.lastIndex < 2 {
                 self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
                 
@@ -239,7 +237,6 @@ class GameViewController: UIViewController {
                 self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":1])
                 
             }
-            print("end life > 0")
         } else {
             self.ref.childByAppendingPath("ended").updateChildValues(["end":"true"])
             
@@ -248,6 +245,7 @@ class GameViewController: UIViewController {
     }
     
     func resetTimer() {
+        timerView.removeFromSuperview()
         timerToPlay.invalidate()
         timerPerSecond.invalidate()
         timeLeft = 8
@@ -256,6 +254,7 @@ class GameViewController: UIViewController {
     }
     
     func timerPerSecondFires() {
+       
         timerLeftLabel.text = String(--timeLeft)
     }
     
@@ -804,10 +803,6 @@ class GameViewController: UIViewController {
     
     func checkCorrectIndex() -> Int {
         var i = 0
-        print("start")
-
-
-            print("main")
                 
                 let sortedTabQuestion = self.tabQuestion.sort({ (A, B) -> Bool in
                     return Int(A.answer!)! < Int(B.answer!)!
