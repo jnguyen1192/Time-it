@@ -7,8 +7,8 @@
 //
 
 /// Mettre le fond d'accueil
-/// Mettre barre timer
-
+/// Algo durée timer
+/// Réduire range
 
 import UIKit
 import Firebase
@@ -43,7 +43,7 @@ class GameViewController: UIViewController {
     var life = 3
     var timerToPlay = NSTimer()
     var timerPerSecond = NSTimer()
-    var timeLeft = 8
+    var timeLeft = 10
     var timerLeftLabel = UILabel()
     var timerView = UIView()
 
@@ -208,11 +208,11 @@ class GameViewController: UIViewController {
             timerView.m_height |=| 10
         ] ~~ .Activated
 
-        UIView.animateWithDuration(8, animations: {
+        UIView.animateWithDuration(Double(timeLeft), animations: {
             self.timerView.frame.size.width = 0
         })
         timerPerSecond = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "timerPerSecondFires", userInfo: nil, repeats: true)
-        timerToPlay = NSTimer.scheduledTimerWithTimeInterval(8, target: self, selector: "timerToPlayFires", userInfo: nil, repeats: false)
+        timerToPlay = NSTimer.scheduledTimerWithTimeInterval(Double(timeLeft), target: self, selector: "timerToPlayFires", userInfo: nil, repeats: false)
         
     }
     
@@ -248,7 +248,7 @@ class GameViewController: UIViewController {
         timerView.removeFromSuperview()
         timerToPlay.invalidate()
         timerPerSecond.invalidate()
-        timeLeft = 8
+        timeLeft = 10 - nbTour / 2
         timerLeftLabel.text = String(timeLeft)
 
     }
