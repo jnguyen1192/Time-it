@@ -93,7 +93,7 @@ class HomeViewController: UIViewController {
         
         findPlayerOutlet  = UIButton(type: UIButtonType.RoundedRect) as UIButton
         findPlayerOutlet.frame = CGRectMake(0, 0, 0, 0)
-        findPlayerOutlet.addTarget(self, action: "findPlayer:", forControlEvents: UIControlEvents.TouchUpInside)
+        findPlayerOutlet.addTarget(self, action: #selector(HomeViewController.findPlayer(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         readyLabel.frame = CGRect(x: 0, y: 0, width: 0, height: 0)
         

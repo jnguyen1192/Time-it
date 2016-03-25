@@ -6,7 +6,8 @@
 //  Copyright © 2016 Florent Taine. All rights reserved.
 //
 
-/// Mettre le fond d'accueil
+/// Design v2
+/// Rendre l'app compatible avec Swift 3
 
 
 import UIKit
@@ -225,7 +226,7 @@ class GameViewController: UIViewController {
 
         questionPlaying.userInteractionEnabled = false
         
-        self.life--
+        self.life -= 1
         self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":2])
         self.lastIndex = self.checkCorrectIndex()
         if self.life > 0 {
