@@ -7,8 +7,6 @@
 //
 
 /// Design v2
-/// Rendre l'app compatible avec Swift 3
-
 
 import UIKit
 import Firebase
@@ -70,7 +68,7 @@ class GameViewController: UIViewController {
         
     
       
-        tap = UIPanGestureRecognizer(target: self, action: Selector("handlePan"))
+        tap = UIPanGestureRecognizer(target: self, action: #selector(GameViewController.handlePan))
     }
     
     override func viewDidLayoutSubviews() {
@@ -134,7 +132,7 @@ class GameViewController: UIViewController {
                     }
                     
                 }
-                self.nbTour++
+                self.nbTour += 1
 
                 
                 if self.isMaster() {
@@ -168,7 +166,7 @@ class GameViewController: UIViewController {
             self.placeQuestion()
             self.placeDropArea()
             if self.nbTour == 0 {
-                self.nbTour++
+                self.nbTour += 1
                 if self.isMaster() {
                     self.pickCarte()
                     
@@ -211,8 +209,8 @@ class GameViewController: UIViewController {
         UIView.animateWithDuration(Double(timeLeft), animations: {
             self.timerView.frame.size.width = 0
         })
-        timerPerSecond = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "timerPerSecondFires", userInfo: nil, repeats: true)
-        timerToPlay = NSTimer.scheduledTimerWithTimeInterval(Double(timeLeft), target: self, selector: "timerToPlayFires", userInfo: nil, repeats: false)
+        timerPerSecond = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(GameViewController.timerPerSecondFires), userInfo: nil, repeats: true)
+        timerToPlay = NSTimer.scheduledTimerWithTimeInterval(Double(timeLeft), target: self, selector: #selector(GameViewController.timerToPlayFires), userInfo: nil, repeats: false)
         
     }
     
@@ -254,8 +252,8 @@ class GameViewController: UIViewController {
     }
     
     func timerPerSecondFires() {
-       
-        timerLeftLabel.text = String(--timeLeft)
+       timeLeft -= 1
+        timerLeftLabel.text = String(timeLeft)
     }
     
    
@@ -314,7 +312,7 @@ class GameViewController: UIViewController {
                     for question in self.tabQuestion.dropLast() {
                     
                         self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
-                        i++
+                        i += 1
                     
                     }
                 })
@@ -330,7 +328,7 @@ class GameViewController: UIViewController {
                             self.view.viewWithTag(Int("999\(question.id)")!)!.center = self.gameViewCenter
                             self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x += 50
                         }
-                        i++
+                        i += 1
                     }
                 })
             } else if self.nbTour >= 3 {
@@ -347,7 +345,7 @@ class GameViewController: UIViewController {
                             self.view.viewWithTag(Int("999\(question.id)")!)!.frame.origin.x += 100
                         
                         }
-                        i++
+                        i += 1
                     
         
                     }
@@ -642,7 +640,7 @@ class GameViewController: UIViewController {
                         if area == areaD {
                             lastIndex = i
                         }
-                        i++
+                        i += 1
                     }
                     if lastIndex == 0 {
                         for question in tabQuestion.dropLast() {
@@ -760,7 +758,7 @@ class GameViewController: UIViewController {
                     self.lastIndex = self.checkCorrectIndex()
 
                     GCDQueue.Default.async {
-                        self.life--
+                        self.life -= 1
                         self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":2])
 
                         if self.life > 0 {
@@ -825,7 +823,7 @@ class GameViewController: UIViewController {
                     if question == self.currentQuestion {
                         return i
                     }
-                    i++
+                    i += 1
                 }
             
 

@@ -91,6 +91,11 @@ class HomeViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
+        let gradient = [UIColor.hex("5698F9"), UIColor.hex("e365f8")].gradient()
+        self.view.backgroundColor = UIColor.clearColor()
+        gradient.frame = self.view.frame
+        self.view.layer.insertSublayer(gradient, atIndex: 0)
+        
         findPlayerOutlet  = UIButton(type: UIButtonType.RoundedRect) as UIButton
         findPlayerOutlet.frame = CGRectMake(0, 0, 0, 0)
         findPlayerOutlet.addTarget(self, action: #selector(HomeViewController.findPlayer(_:)), forControlEvents: UIControlEvents.TouchUpInside)
@@ -100,20 +105,22 @@ class HomeViewController: UIViewController {
         self.view.addSubview(self.findPlayerOutlet)
         self.view.addSubview(self.readyLabel)
 
-        
-        findPlayerOutlet.backgroundColor = UIColor.hex("1D6C5D")
-        findPlayerOutlet.setTitleColor(UIColor.hex("F0F5F7"), forState: .Normal)
+        findPlayerOutlet.backgroundColor = UIColor.hex("f4b73b")
+        findPlayerOutlet.setTitleColor(UIColor.hex("ffffff"), forState: .Normal)
         findPlayerOutlet.setTitle("Time it !", forState: .Normal)
         findPlayerOutlet.layer.cornerRadius = 33
-        findPlayerOutlet.layer.borderWidth = 1
-        findPlayerOutlet.layer.borderColor = UIColor.hex("3C3F3F").CGColor
+        //findPlayerOutlet.layer.borderWidth = 1
+        //findPlayerOutlet.layer.borderColor = UIColor.hex("ffc742").CGColor
+        findPlayerOutlet.layer.shadowOffset = CGSize(width: 5, height: 5)
+        findPlayerOutlet.layer.shadowOpacity = 0.5
+        findPlayerOutlet.layer.shadowRadius = 10
         findPlayerOutlet.titleLabel?.font = UIFont (name: "Roboto-Light", size: 50)
 
 
         findPlayerOutlet.m_width |=| self.view.m_width * 71 / 100
         findPlayerOutlet.m_height |=| self.view.m_height * 13 / 100
         findPlayerOutlet.m_centerX |=| self.view
-        findPlayerOutlet.m_centerY |=| self.view.m_centerY - 50
+        findPlayerOutlet.m_centerY |=| self.view.m_centerY
         
         
         let readyString = "Ready to time it ?"
@@ -122,7 +129,7 @@ class HomeViewController: UIViewController {
         
         readyLabel.attributedText = attributedString
         
-        readyLabel.textColor = UIColor.hex("3C3F3F")
+        readyLabel.textColor = UIColor.hex("fff")
         readyLabel.textAlignment = .Center
         readyLabel.font = UIFont(name: "Roboto-Light", size: 23)
 
@@ -131,7 +138,7 @@ class HomeViewController: UIViewController {
             readyLabel.m_width |=| self.view,
             readyLabel.m_height |=| 30,
             readyLabel.m_centerX |=| self.view,
-            readyLabel.m_top |=| self.view.m_bottom * 21 / 100
+            readyLabel.m_top |=| self.view.m_bottom * 30 / 100
         ] ~~ .Activated
         
         
@@ -180,7 +187,8 @@ class HomeViewController: UIViewController {
                         
                         for (key, subJsonBis):(String, JSON) in subJson {
                             let item = Item()
-                            item.id = i++
+                            item.id = i
+                            i += 1
                             item.answer = index
                             item.question = subJsonBis[key].string
                             orderedJson.append(item)
@@ -199,7 +207,8 @@ class HomeViewController: UIViewController {
                     })
                     i=0
                     for item in orderedJson {
-                        item.id = i++
+                        item.id = i
+                        i += 1
                         try! realm.write{
                             realm.add(item)
                         }
