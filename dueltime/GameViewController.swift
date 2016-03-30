@@ -66,19 +66,14 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-    
+        self.view.backgroundColor = UIColor.clearColor()
+        let gradient = [UIColor.hex("5598f9"), UIColor.hex("e365f8")].gradient()
+        gradient.frame = self.view.frame
+        self.view.layer.insertSublayer(gradient, atIndex: 0)
       
         tap = UIPanGestureRecognizer(target: self, action: #selector(GameViewController.handlePan))
     }
     
-    override func viewDidLayoutSubviews() {
-        
-        let topBorder = CALayer()
-        topBorder.frame = CGRectMake(0, 0, bottomView.bounds.size.width, 1)
-        topBorder.backgroundColor = UIColor.hex("000").CGColor
-        bottomView.layer.addSublayer(topBorder)
-
-    }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
@@ -87,7 +82,7 @@ class GameViewController: UIViewController {
         self.view.addSubview(bottomView)
         
         //Bottom view setup
-        bottomView.backgroundColor = UIColor.hex("1D6C5D")
+        bottomView.backgroundColor = UIColor.clearColor()
         [bottomView.m_bottom, bottomView.m_left, bottomView.m_right] |=| self.view
         bottomView.m_height |=| self.view.m_height * 30 / 100
         
