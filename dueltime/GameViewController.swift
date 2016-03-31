@@ -6,8 +6,6 @@
 //  Copyright © 2016 Florent Taine. All rights reserved.
 //
 
-/// Design v2
-
 import UIKit
 import Firebase
 import RealmSwift
