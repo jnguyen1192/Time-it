@@ -78,7 +78,7 @@ class GameViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        self.view.backgroundColor = UIColor.hex("D2DADF")
+    
         self.view.addSubview(bottomView)
         
         //Bottom view setup
@@ -92,16 +92,7 @@ class GameViewController: UIViewController {
         ref.childByAppendingPath("isCorrect").setValue(["correct":-1])
         
         ref.childByAppendingPath("isCorrect").observeEventType(.ChildChanged, withBlock: {snap in
-            let correct = snap.value as! Int
-            if correct == 1 {
-
-                let question = self.view.viewWithTag(Int("999\(self.currentQuestion!.id)")!)
-                question?.backgroundColor = UIColor.hex("1D6C5D")
-            } else if correct == 2 {
-                let question = self.view.viewWithTag(Int("999\(self.currentQuestion!.id)")!)
-                question?.backgroundColor = UIColor.hex("DA3227")
-
-            }
+            ///TODO: Delete ?
         })
         
         ref.childByAppendingPath("lastIndex").observeEventType(.ChildChanged, withBlock: {snap in
@@ -153,8 +144,12 @@ class GameViewController: UIViewController {
             self.tabQuestion.append(question!)
             self.addQuestion()
             if self.nbTour == 1  {
-            let view = self.view.viewWithTag(Int("999\(self.tabQuestion[0].id)")!)! as UIView
-                view.backgroundColor = UIColor.hex("1D6C5D")
+                
+                let view = self.view.viewWithTag(Int("999\(self.tabQuestion[0].id)")!)! as UIView
+                view.backgroundColor = UIColor.hex("000000")
+                view.alpha = 0.6
+                let label = self.view.viewWithTag(self.tabQuestion[0].id)
+                label?.backgroundColor = UIColor.clearColor()
             }
             
             self.currentQuestion = self.tabQuestion.last
@@ -255,10 +250,17 @@ class GameViewController: UIViewController {
     func placeQuestion() {
 
         
-            var i = 0
-            
+        var i = 0
+ 
             if self.nbTour > 0 {
                 for question in self.tabQuestion.dropLast() {
+                    let backround = self.view.viewWithTag(Int("999\(question.id)")!)
+                    backround?.backgroundColor = UIColor.hex("000000")
+                    backround?.alpha = 0.6
+                    let label = self.view.viewWithTag(question.id) as! UILabel
+                    label.backgroundColor = UIColor.clearColor()
+                    label.textColor = UIColor.whiteColor()
+
                     if let label = self.view.viewWithTag(question.id) as? UILabel {
                         label.textColor = UIColor.hex("F0F5F7")
                         let view = self.view.viewWithTag(Int("999\(question.id)")!)! as UIView
@@ -467,6 +469,7 @@ class GameViewController: UIViewController {
         if let question = tabQuestion.last?.question {
             if let id = tabQuestion.last?.id {
                 label.text = "\(question)"
+                label.textColor = UIColor.whiteColor()
                 label.tag = id
                 label.font = UIFont(name: "Roboto-Regular", size: 15)
                 view.tag = Int("999\(id)")!
@@ -485,9 +488,9 @@ class GameViewController: UIViewController {
         
       
         
-        view.backgroundColor = UIColor.hex("F0F5F7")
-        view.layer.borderWidth = 2
-        view.layer.borderColor = UIColor.hex("3C3F3F").CGColor
+        view.backgroundColor = UIColor.hex("ffffff")
+        label.backgroundColor = UIColor.hex("ffffff")
+
         view.layer.cornerRadius = 10
         view.clipsToBounds = true
         view.center = bottomView.center
