@@ -87,11 +87,6 @@ class GameViewController: UIViewController {
         
         ref.childByAppendingPath("lastIndex").setValue(["lastIndex":-1])
         ref.childByAppendingPath("ended").setValue(["end":"false"])
-        ref.childByAppendingPath("isCorrect").setValue(["correct":-1])
-        
-        ref.childByAppendingPath("isCorrect").observeEventType(.ChildChanged, withBlock: {snap in
-            ///TODO: Delete ?
-        })
         
         ref.childByAppendingPath("lastIndex").observeEventType(.ChildChanged, withBlock: {snap in
             
@@ -213,7 +208,6 @@ class GameViewController: UIViewController {
         questionPlaying.userInteractionEnabled = false
         
         self.life -= 1
-        self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":2])
         self.lastIndex = self.checkCorrectIndex()
         if self.life > 0 {
             if self.lastIndex < 2 {
@@ -351,7 +345,6 @@ class GameViewController: UIViewController {
     
     func placeDropArea() {
         ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":-1])
-        ref.childByAppendingPath("isCorrect").updateChildValues(["correct":-1])
         ref.childByAppendingPath("remove").updateChildValues(["remove":-1])
 
 
@@ -712,8 +705,6 @@ class GameViewController: UIViewController {
                 if isCorrect() {
                     
                     GCDQueue.Default.async {
-                        self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":1])
-
                         if self.lastIndex < 2 {
                             self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
                             
@@ -729,7 +720,7 @@ class GameViewController: UIViewController {
                     let labelGood = UILabel()
                     labelGood.text = "Good !"
                     labelGood.textAlignment = .Center
-                    labelGood.textColor = UIColor.hex("3ABED9")
+                    labelGood.textColor = UIColor.hex("1D6C5D")
                 
                     self.view.addSubview(labelGood)
                     let viewDragged = self.view.viewWithTag(Int("999\(tabQuestion.last!.id)")!)! as UIView
@@ -755,8 +746,6 @@ class GameViewController: UIViewController {
 
                     GCDQueue.Default.async {
                         self.life -= 1
-                        self.ref.childByAppendingPath("isCorrect").updateChildValues(["correct":2])
-
                         if self.life > 0 {
                             if self.lastIndex < 2 {
                                 self.ref.childByAppendingPath("lastIndex").updateChildValues(["lastIndex":2])
