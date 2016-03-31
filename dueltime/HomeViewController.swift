@@ -109,8 +109,6 @@ class HomeViewController: UIViewController {
         findPlayerOutlet.setTitleColor(UIColor.hex("ffffff"), forState: .Normal)
         findPlayerOutlet.setTitle("Time it !", forState: .Normal)
         findPlayerOutlet.layer.cornerRadius = 33
-        //findPlayerOutlet.layer.borderWidth = 1
-        //findPlayerOutlet.layer.borderColor = UIColor.hex("ffc742").CGColor
         findPlayerOutlet.layer.shadowOffset = CGSize(width: 5, height: 5)
         findPlayerOutlet.layer.shadowOpacity = 0.5
         findPlayerOutlet.layer.shadowRadius = 10
