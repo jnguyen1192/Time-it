@@ -91,7 +91,7 @@ class HomeViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        let gradient = [UIColor.hex("5698F9"), UIColor.hex("e365f8")].gradient()
+        let gradient = [UIColor.hex("55599A"), UIColor.hex("fb993c")].gradient()
         self.view.backgroundColor = UIColor.clearColor()
         gradient.frame = self.view.frame
         self.view.layer.insertSublayer(gradient, atIndex: 0)
@@ -105,13 +105,13 @@ class HomeViewController: UIViewController {
         self.view.addSubview(self.findPlayerOutlet)
         self.view.addSubview(self.readyLabel)
 
-        findPlayerOutlet.backgroundColor = UIColor.hex("f4b73b")
+        findPlayerOutlet.backgroundColor = UIColor.hex("3949ab")
         findPlayerOutlet.setTitleColor(UIColor.hex("ffffff"), forState: .Normal)
         findPlayerOutlet.setTitle("Time it !", forState: .Normal)
         findPlayerOutlet.layer.cornerRadius = 33
-        findPlayerOutlet.layer.shadowOffset = CGSize(width: 5, height: 5)
+        findPlayerOutlet.layer.shadowOffset = CGSize(width: 2, height: 2)
         findPlayerOutlet.layer.shadowOpacity = 0.5
-        findPlayerOutlet.layer.shadowRadius = 10
+        findPlayerOutlet.layer.shadowRadius = 5
         findPlayerOutlet.titleLabel?.font = UIFont (name: "Roboto-Light", size: 50)
 
 

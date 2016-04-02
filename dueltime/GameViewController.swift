@@ -65,7 +65,7 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         self.view.backgroundColor = UIColor.clearColor()
-        let gradient = [UIColor.hex("5598f9"), UIColor.hex("e365f8")].gradient()
+        let gradient = [UIColor.hex("55599A"), UIColor.hex("fb993c")].gradient()
         gradient.frame = self.view.frame
         self.view.layer.insertSublayer(gradient, atIndex: 0)
       
