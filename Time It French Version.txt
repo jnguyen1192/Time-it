@@ -1,0 +1,380 @@
+1897[0]
+  0 = Canon de 75 mm
+1898[0]
+  0 = Télécommande
+1898[1]
+  1 = Fusil semi-automatique
+1899[0]
+  0 = Lampe torche
+1900[0]
+  0 = Batterie nickel zinc
+1900[1]
+  1 = Tapette à mouches
+1900[2]
+  2 = Punaise
+1900[3]
+  3 = Clementine
+1900[4]
+  4 = Accélérometre
+1901[0]
+  0 = Travail à la chaîne
+1901[1]
+  1 = Rasoir jetable
+1901[2]
+  2 = Enveloppe fenêtré
+1902[0]
+  0 = Aide auditive
+1902[1]
+  1 = Ours en peluche
+1902[2]
+  2 = Air conditioning
+1902[3]
+  3 = Scooter
+1903[0]
+  0 = Verre feuilleté
+1903[1]
+  1 = Sachet de thé
+1903[2]
+  2 = Avion
+1903[3]
+  3 = Essuie-glaces
+1904[0]
+  0 = Boîte automatique
+1904[1]
+  1 = Banana split
+1904[2]
+  2 = Dragline
+1905[0]
+  0 = Casque de baseball
+1905[1]
+  1 = Flace à l'eau
+1906[0]
+  0 = Lyophilisation
+1907[0]
+  0 = Autochrome
+1907[1]
+  1 = Hélicoptère
+1907[2]
+  2 = Papier toilette
+1908[0]
+  0 = Pomme d'amour
+1909[0]
+  0 = Destructeur de documents
+1909[1]
+  1 = Silencieux
+1909[2]
+  2 = Gin rami
+1910[0]
+  0 = Micro-casque
+1910[1]
+  1 = Lampe néon
+1911[0]
+  0 = Radiobalise
+1912[0]
+  0 = Pilote automatique
+1912[1]
+  1 = Feu de circulation
+1914[0]
+  0 = Cône de signalisation
+1914[1]
+  1 = Biscuit chinois
+1915[0]
+  0 = Sonar
+1916[0]
+  0 = Petit pain pour hamburger
+1916[1]
+  1 = Supermarché
+1916[2]
+  2 = Camion de remorquage
+1916[3]
+  3 = Interrupteur à bascule
+1917[0]
+  0 = Reflector
+1918[0]
+  0 = French dip
+1918[1]
+  1 = Sac d'épicerie
+1919[0]
+  0 = Mélangeur
+1920[0]
+  0 = Eskimo Pie
+1921[0]
+  0 = Pansement
+1921[1]
+  1 = Headrest
+1921[2]
+  2 = Porte de garage
+1921[3]
+  3 = Vaccin contre le tuberculose
+1921[4]
+  4 = Repair patch
+1922[0]
+  0 = Vaccin contre le tétanos
+1922[1]
+  1 = Cabriolet
+1922[2]
+  2 = Ski nautique
+1923[0]
+  0 = Bulldozer
+1924[0]
+  0 = Cheeseburger
+1924[1]
+  1 = Chambre à gaz
+1925[0]
+  0 = Ruban adhésif
+1926[0]
+  0 = Drive through
+1926[1]
+  1 = Polo
+1927[0]
+  0 = Système ABS
+1927[1]
+  1 = Jukebox
+1927[2]
+  2 = Instrument à résonatteur
+1927[3]
+  3 = Horloge à quartz
+1928[0]
+  0 = Fauteuil inclinable
+1928[1]
+  1 = Glaçon
+1928[2]
+  2 = Bubble gum
+1928[3]
+  3 = Rasoir électrique
+1929[0]
+  0 = Lunette de soleil
+1929[1]
+  1 = Congélation
+1930[0]
+  0 = Autoradio
+1930[1]
+  1 = Cookie au chocolat
+1931[0]
+  0 = Guitare électrique
+1932[0]
+  0 = Broisse à toilette
+1932[1]
+  1 = Caddie de golf
+1934[0]
+  0 = Radar
+1935[0]
+  0 = Echelle de Richter
+1935[1]
+  1 = Ultraviolet
+1935[2]
+  2 = Horodateur
+1935[3]
+  3 = pH-mètre
+1936[0]
+  0 = Crème solaire
+1936[1]
+  1 = Langages de programmation
+1936[2]
+  2 = Télésiège
+1936[3]
+  3 = Guitare basse
+1937[0]
+  0 = Ordinateur numérique
+1937[1]
+  1 = Caddie de supermarché
+1938[0]
+  0 = Beach ball
+1938[1]
+  1 = Nylon
+1938[2]
+  2 = Teflon
+1939[0]
+  0 = Machine à sous
+1939[1]
+  1 = Vocodeur
+1939[2]
+  2 = Antibiotique
+1941[0]
+  0 = Bombe aérosole
+1941[1]
+  1 = Déodorant
+1942[0]
+  0 = Bazooka
+1943[0]
+  0 = Ressort magique
+1945[0]
+  0 = Micro-ondes
+1946[0]
+  0 = Bikini
+1946[1]
+  1 = Tupperware
+1946[2]
+  2 = Carte dde crédit
+1947[0]
+  0 = Transistor
+1947[1]
+  1 = Défibrilateur
+1947[2]
+  2 = Avions supersoniques
+1947[3]
+  3 = Peinture acrylique
+1948[0]
+  0 = Laque à cheveux
+1948[1]
+  1 = Litière pour chat
+1948[2]
+  2 = Sèche-mains
+1948[3]
+  3 = Télévision par câble
+1948[4]
+  4 = Frisbee 
+1948[5]
+  5 = Jeux vidéo
+1949[0]
+  0 = Datation par le carbone 14
+1949[1]
+  1 = Sac à vomi
+1949[2]
+  2 = Mannequin d’essai de choc
+1949[3]
+  3 = Compilateur
+1949[4]
+  4 = Cyclomoteur
+1950[0]
+  0 = Canon à neige
+1950[1]
+  1 = Prompteur
+1951[0]
+  0 = Glacière
+1951[1]
+  1 = Combinaison de plongée
+1952[0]
+  0 = Neuroleptique
+1952[1]
+  1 = Airbag
+1952[2]
+  2 = Code barre
+1952[3]
+  3 = Coeur artificiel
+1953[0]
+  0 = Stylo-feutre
+1954[0]
+  0 = Diamant synthétique
+1954[1]
+  1 = Radar de contrôle routier
+1955[0]
+  0 = Disque dur
+1956[0]
+  0 = Karting
+1956[1]
+  1 = Robot industriel
+1956[2]
+  2 = Système d'exploitation
+1956[3]
+  3 = Cassette vidéo
+1957[0]
+  0 = Laser
+1957[1]
+  1 = Papier bulle
+1958[0]
+  0 = Collier de serrage en plastique
+1958[1]
+  1 = Fibre de carbone
+1958[2]
+  2 = Circuit intégré
+1959[0]
+  0 = Satellite météo
+1959[1]
+  1 = Pelouse artificielle
+1960[0]
+  0 = Pillule de contraception
+1961[0]
+  0 = Tableur
+1961[1]
+  1 = Ordinateur portable
+1962[0]
+  0 = LED
+1963[0]
+  0 = Souris d'ordinateur
+1963[1]
+  1 = BASIC
+1964[0]
+  0 = Ecran plasma
+1964[1]
+  1 = LCD
+1965[0]
+  0 = Snowboard
+1965[1]
+  1 = Kevlar
+1965[2]
+  2 = Hypertexte
+1965[3]
+  3 = Téléphone sans fil
+1965[4]
+  4 = Space pen
+1965[5]
+  5 = Disque compact
+1965[6]
+  6 = K-way
+1966[0]
+  0 = Hover train
+1968[0]
+  0 = Réalité virtuelle
+1969[0]
+  0 = Apollo 11
+1969[1]
+  1 = Imprimante laser
+1969[2]
+  2 = Taser
+1969[3]
+  3 = Tapis de souris
+1970[0]
+  0 = Code digital
+1971[0]
+  0 = Uno
+1971[1]
+  1 = Ordinateur personnel
+1971[2]
+  2 = Microprocesseur
+1971[3]
+  3 = Courrier électronique
+1972[0]
+  0 = Langage C
+1972[1]
+  1 = GPS
+1973[0]
+  0 = E-paper
+1973[1]
+  1 = Téléphone portable
+1973[2]
+  2 = Système de messagerie vocale
+1974[0]
+  0 = Carte à puce
+1974[1]
+  1 = Post-it
+1975[0]
+  0 = Caméra digitale
+1975[1]
+  1 = Ethernet
+1981[0]
+  0 = Paintball
+1983[0]
+  0 = Internet
+1987[0]
+  0 = Perl
+1987[0]
+  1 = Tablette digitale
+1988[0]
+  0 = Patch à la nicotine
+1988[1]
+  1 = Pare-feu
+1989[0]
+  0 = Format Zip
+1994[0]
+  0 = Segway PT
+1995[0]
+  0 = Molette de souris
+1995[1]
+  1 = JavaScript
+1996[0]
+  0 = Adobe Flash
+1999[0]
+  0 = iBOT
+2001[0]
+  0 = Cigarette électronique
